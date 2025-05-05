@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerControl : MonoBehaviour
 {
     public int Point = 100; // 行动点
     public PlayerInputControl inputControl;
@@ -16,16 +16,27 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         inputControl = new PlayerInputControl();
+        mainCamera = Camera.main; // 获取主相机
     }
 
     private void OnEnable()
     {
         inputControl.Enable();
+        // 新增E键输入监听
+        inputControl.GamePlay.PlaceBlock.performed += _ => TogglePlacementMode(true);
+        inputControl.GamePlay.PlaceBlock.canceled += _ => TogglePlacementMode(false);
+        // 新增鼠标点击监听
+        inputControl.GamePlay.MouseClick.performed += OnMouseClick;
+        
     }
 
     private void OnDisable()
     {
         inputControl.Disable();
+        // 移除监听
+        inputControl.GamePlay.PlaceBlock.performed -= _ => TogglePlacementMode(true);
+        inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
+        inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
     }
 
     private void Update()
@@ -79,5 +90,47 @@ public class PlayerMove : MonoBehaviour
 
         rb.position = targetPosition;
         isMoving = false;
+    }
+    [Header("放置方块设置")]
+    public GameObject blockPrefab; // 在Inspector中拖入你的方块预制体
+    public LayerMask groundLayer; // 设置地面层级（用于鼠标射线检测）
+    private bool isPlacingMode = false; // 是否处于放置模式
+    private Camera mainCamera;
+
+  
+
+    
+
+    // 切换放置模式
+    private void TogglePlacementMode(bool isActive)
+    {
+        isPlacingMode = isActive;
+        
+    }
+    private void OnMouseClick(InputAction.CallbackContext context)
+    {
+        if (!isPlacingMode || Point <= 0) return;
+
+        Vector2 mousePos = inputControl.GamePlay.MousePosition.ReadValue<Vector2>();
+        Ray ray = mainCamera.ScreenPointToRay(mousePos);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, groundLayer);
+
+        if (hit.collider != null)
+        {
+            // 关键修改：确保坐标对齐到网格中心
+            Vector2 placePos = new Vector2(
+                Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
+                Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
+            );
+
+            // 调试显示网格对齐位置（可视化检查）
+            Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
+
+            if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
+            {
+                Instantiate(blockPrefab, placePos, Quaternion.identity);
+                Point--;
+            }
+        }
     }
 }
