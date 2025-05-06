@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class PlayerControl : MonoBehaviour
 {
     public int Point = 100; // 行动点
@@ -12,6 +13,10 @@ public class PlayerControl : MonoBehaviour
     public float gridSize = 1f; // 每格的大小
     public LayerMask obstacleLayer; // 障碍物层级（在Unity编辑器中设置）
     private bool isMoving = false; // 是否正在移动
+
+    private float inputCooldown = 0.2f; // 输入缓冲时间 避免切换角色时错误输入
+    private float lastSwitchTime;
+
 
     private void Awake()
     {
@@ -38,9 +43,28 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
         inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
     }
+    private bool isActive = false;
 
+    public void SetActive(bool active)
+    {
+        
+        isActive = active;
+        GetComponent<SpriteRenderer>().color = active ? Color.white : Color.gray;
+        if (active)
+        {
+            Point += 3;
+            if (Point > 6)
+            {
+                Point = 6;
+            }
+
+            lastSwitchTime = Time.time;// 记录激活时间
+        }
+    }
     private void Update()
     {
+        if (!isActive || Time.time - lastSwitchTime < inputCooldown)
+            return; // 非激活状态或仍在冷却中
         if (!isMoving && Point > 0)
         {
             inputDirection = inputControl.GamePlay.Move.ReadValue<Vector2>();
@@ -129,7 +153,7 @@ public class PlayerControl : MonoBehaviour
             if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
             {
                 Instantiate(blockPrefab, placePos, Quaternion.identity);
-                Point--;
+                Point-=2;
             }
         }
     }

@@ -80,6 +80,15 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FinishRound"",
+                    ""type"": ""Button"",
+                    ""id"": ""ace8d1ed-baac-4430-93bd-dbd09a657632"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -355,6 +364,17 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b258d2f9-620e-482c-a739-aa52b7fd9eca"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FinishRound"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -948,6 +968,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         m_GamePlay_PlaceBlock = m_GamePlay.FindAction("PlaceBlock", throwIfNotFound: true);
         m_GamePlay_MouseClick = m_GamePlay.FindAction("MouseClick", throwIfNotFound: true);
         m_GamePlay_MousePosition = m_GamePlay.FindAction("MousePosition", throwIfNotFound: true);
+        m_GamePlay_FinishRound = m_GamePlay.FindAction("FinishRound", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1033,6 +1054,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_PlaceBlock;
     private readonly InputAction m_GamePlay_MouseClick;
     private readonly InputAction m_GamePlay_MousePosition;
+    private readonly InputAction m_GamePlay_FinishRound;
     public struct GamePlayActions
     {
         private @PlayerInputControl m_Wrapper;
@@ -1043,6 +1065,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         public InputAction @PlaceBlock => m_Wrapper.m_GamePlay_PlaceBlock;
         public InputAction @MouseClick => m_Wrapper.m_GamePlay_MouseClick;
         public InputAction @MousePosition => m_Wrapper.m_GamePlay_MousePosition;
+        public InputAction @FinishRound => m_Wrapper.m_GamePlay_FinishRound;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1070,6 +1093,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
+            @FinishRound.started += instance.OnFinishRound;
+            @FinishRound.performed += instance.OnFinishRound;
+            @FinishRound.canceled += instance.OnFinishRound;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -1092,6 +1118,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
+            @FinishRound.started -= instance.OnFinishRound;
+            @FinishRound.performed -= instance.OnFinishRound;
+            @FinishRound.canceled -= instance.OnFinishRound;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -1280,6 +1309,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         void OnPlaceBlock(InputAction.CallbackContext context);
         void OnMouseClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
+        void OnFinishRound(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
