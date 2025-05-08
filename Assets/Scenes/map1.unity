@@ -12840,6 +12840,7 @@ GameObject:
   - component: {fileID: 444485956}
   - component: {fileID: 444485958}
   - component: {fileID: 444485957}
+  - component: {fileID: 444485961}
   m_Layer: 10
   m_Name: blueDiamond
   m_TagString: Untagged
@@ -12856,8 +12857,8 @@ Transform:
   m_GameObject: {fileID: 444485955}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.96, y: 6.04, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -13.4629, y: 7.4101, z: 0}
+  m_LocalScale: {x: 1.0189, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2005333502}
@@ -12935,6 +12936,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &444485961
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444485955}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.002662875, y: 0.043405056}
+  serializedVersion: 2
+  m_Radius: 0.4171906
 --- !u!1 &463839800
 GameObject:
   m_ObjectHideFlags: 0
@@ -13252,6 +13288,7 @@ GameObject:
   - component: {fileID: 649481971}
   - component: {fileID: 649481973}
   - component: {fileID: 649481972}
+  - component: {fileID: 649481975}
   m_Layer: 10
   m_Name: greenDiamond
   m_TagString: Untagged
@@ -13347,6 +13384,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &649481975
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649481970}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0000009536743, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.38131237
 --- !u!1 &1200098612
 GameObject:
   m_ObjectHideFlags: 0
@@ -13508,6 +13580,7 @@ GameObject:
   - component: {fileID: 1384511831}
   - component: {fileID: 1384511834}
   - component: {fileID: 1384511835}
+  - component: {fileID: 1384511837}
   - component: {fileID: 1384511836}
   m_Layer: 7
   m_Name: player2
@@ -13674,6 +13747,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
+  isGetDiamond: 0
   blockPrefab: {fileID: 77234807}
   groundLayer:
     serializedVersion: 2
@@ -13693,6 +13767,23 @@ MonoBehaviour:
   players:
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &1384511837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384511830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcc495eb5baa0e4e94cdb5600b242e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkRaduis: 0.5
+  Diamond:
+    serializedVersion: 2
+    m_Bits: 1024
+  PlayerControl: {fileID: 0}
 --- !u!1 &1385200734
 GameObject:
   m_ObjectHideFlags: 0
@@ -13705,6 +13796,7 @@ GameObject:
   - component: {fileID: 1385200738}
   - component: {fileID: 1385200737}
   - component: {fileID: 1385200736}
+  - component: {fileID: 1385200740}
   - component: {fileID: 1385200735}
   m_Layer: 7
   m_Name: player1
@@ -13732,6 +13824,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
+  isGetDiamond: 0
   blockPrefab: {fileID: 77234807}
   groundLayer:
     serializedVersion: 2
@@ -13875,6 +13968,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1581248977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1385200740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385200734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcc495eb5baa0e4e94cdb5600b242e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkRaduis: 0.5
+  Diamond:
+    serializedVersion: 2
+    m_Bits: 1024
+  PlayerControl: {fileID: 0}
 --- !u!1 &1449422835
 GameObject:
   m_ObjectHideFlags: 0
@@ -22144,6 +22254,7 @@ GameObject:
   - component: {fileID: 1685755339}
   - component: {fileID: 1685755341}
   - component: {fileID: 1685755340}
+  - component: {fileID: 1685755343}
   m_Layer: 10
   m_Name: redDiamond
   m_TagString: Untagged
@@ -22239,6 +22350,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1685755343
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685755338}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.035450935, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.40967274
 --- !u!1 &2005333501
 GameObject:
   m_ObjectHideFlags: 0
