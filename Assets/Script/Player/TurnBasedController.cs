@@ -38,6 +38,7 @@ public class TurnBasedController : MonoBehaviour
     private void SwitchCharacter()
     {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.Length;
+        players[currentPlayerIndex].OnRoundStart();
         UpdateControlState();
         Debug.Log($"ÇÐ»»µ½½ÇÉ«: {currentPlayerIndex + 1}");
     }

@@ -1,8 +1,8 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 
 public class PlayerControl : MonoBehaviour
@@ -15,14 +15,13 @@ public class PlayerControl : MonoBehaviour
     public LayerMask obstacleLayer; // 障碍物层级（在Unity编辑器中设置）
     private bool isMoving = false; // 是否正在移动
     public bool isGetDiamond;
-
     private float inputCooldown = 0.2f; // 输入缓冲时间 避免切换角色时错误输入
     private float lastSwitchTime;
 
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
+   
 
-    
     private Vector2 SnapTo4Directions(Vector2 dir)//移动方向锁定到四个方向
     {
         // 锁定到上下左右四个方向
@@ -74,6 +73,7 @@ public class PlayerControl : MonoBehaviour
     {
         inputControl = new PlayerInputControl();
         mainCamera = Camera.main; // 获取主相机
+        InitializeSkills();
     }
     private void OnEnable()
     {
@@ -83,6 +83,7 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.canceled += _ => TogglePlacementMode(false);
         // 新增鼠标点击监听
         inputControl.GamePlay.MouseClick.performed += OnMouseClick;
+        inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0); // 数字1 -> 技能1
     }
 
     private void OnDisable()
@@ -92,6 +93,7 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.performed -= _ => TogglePlacementMode(true);
         inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
         inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
+        inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
     }
     private bool isActive = false;
 
@@ -116,6 +118,15 @@ public class PlayerControl : MonoBehaviour
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
             return;
+        //技能检测
+        if(isInSkillTargetingMode)
+        {
+            HandleSkillTargeting();
+            return;
+        }
+        // 添加技能快捷键 (示例：数字键1-4)
+        if (Input.GetKeyDown(KeyCode.Alpha1)) TryUseSkill(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) TryUseSkill(1);
 
         // 攻击检测（独立冷却）
         if (Input.GetKeyDown(KeyCode.Space) && Point > 0)
@@ -189,40 +200,6 @@ public class PlayerControl : MonoBehaviour
         isPlacingMode = isActive;
         
     }
-    //private void OnMouseClick(InputAction.CallbackContext context)
-    //{
-    //    if (!isPlacingMode || Point <= 0) return;
-
-    //    Vector2 mousePos = inputControl.GamePlay.MousePosition.ReadValue<Vector2>();
-    //    Ray ray = mainCamera.ScreenPointToRay(mousePos);
-    //    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, groundLayer);
-
-    //    if (hit.collider != null)
-    //    {
-    //        // 关键修改：确保坐标对齐到网格中心
-    //        Vector2 placePos = new Vector2(
-    //            Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
-    //            Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
-    //        );
-
-    //        // 调试显示网格对齐位置（可视化检查）
-    //        Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
-
-    //        if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
-    //        {
-    //            Instantiate(blockPrefab, placePos, Quaternion.identity);
-    //            Point-=2;
-    //        }
-    //    }
-    //}
-    Vector2 GetGridPosition(Vector2 worldPos)
-    {
-        float gridSize = 1.0f; // 需与你的移动格距一致
-        return new Vector2(
-            Mathf.Floor(worldPos.x / gridSize) * gridSize + gridSize * 0.5f,
-            Mathf.Floor(worldPos.y / gridSize) * gridSize + gridSize * 0.5f
-        );
-    }
     private void OnMouseClick(InputAction.CallbackContext context)
     {
         if (!isPlacingMode || Point <= 0) return;
@@ -233,38 +210,110 @@ public class PlayerControl : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Vector2 placePos = GetGridPosition(hit.point);
+            // 关键修改：确保坐标对齐到网格中心
+            Vector2 placePos = new Vector2(
+                Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
+                Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
+            );
+
+            // 调试显示网格对齐位置（可视化检查）
+            Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
 
             if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
             {
-                
-                GameObject newBox = Instantiate(blockPrefab, placePos, Quaternion.identity);
-                SetRandomHardness(newBox); // 设置随机硬度
-                newBox.GetComponent<Obstacle>().UpdateAppearance();
-                Point -=2;
+                Instantiate(blockPrefab, placePos, Quaternion.identity);
+                Point-=2;
             }
         }
     }
 
-    // 设置箱子随机硬度
-    private void SetRandomHardness(GameObject box)
+    [Header("技能系统")]
+    public List<SkillBase> skills = new List<SkillBase>(); // 技能列表
+    private SkillBase currentActiveSkill; // 当前激活的技能(用于目标选择模式)
+    private bool isInSkillTargetingMode = false; // 是否处于技能目标选择模式
+    private bool movementEnabled = true;//技能释放是否允许移动
+    //技能初始化
+    void InitializeSkills()
     {
-        Obstacle obstacle = box.GetComponent<Obstacle>();
-        if (obstacle == null) return;
+        // 获取所有子对象中的技能组件
+        SkillBase[] childSkills = GetComponentsInChildren<SkillBase>();
+        skills.AddRange(childSkills);
 
-        float randomValue = Random.Range(0f, 1f);
-        if (randomValue <= 0.7f) // 70%概率硬度1
+        // 初始化每个技能
+        foreach (var skill in skills)
         {
-            obstacle.hardness = Obstacle.HardnessLevel.Fragile;
-            obstacle.health = 1;
+            skill.Initialize(this);
         }
-        else // 30%概率硬度2
+    }
+    // 进入技能目标选择模式
+    public void EnterSkillTargetingMode(SkillBase skill)
+    {
+        isInSkillTargetingMode = true;
+        currentActiveSkill = skill;
+        movementEnabled = false; // 禁用普通移动
+    }
+
+    // 退出技能目标选择模式
+    public void ExitSkillTargetingMode()
+    {
+        isInSkillTargetingMode = false;
+        currentActiveSkill = null;
+        movementEnabled = true; // 恢复移动
+    }
+    void TryUseSkill(int skillIndex)
+    {
+        if (skillIndex >= 0 && skillIndex < skills.Count)
         {
-            obstacle.hardness = Obstacle.HardnessLevel.Sturdy;
-            obstacle.health = 2;
+            skills[skillIndex].Use();
+        }
+    }
+
+    void HandleSkillTargeting()
+    {
+        // 这里处理技能目标选择的具体逻辑
+        // 例如工程师技能选择障碍类型
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    (currentActiveSkill as EngineerQuickBuildSkill)?.CycleObstacleSelection();
+        //}
+
+        //// 确认技能释放
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    (currentActiveSkill as EngineerQuickBuildSkill)?.ConfirmPlacement();
+        //}
+
+        //// 取消技能
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    (currentActiveSkill as EngineerQuickBuildSkill)?.CancelSkill();
+        //}
+    }
+    public void OnRoundStart()
+    {
+        // 更新所有技能冷却
+        foreach (var skill in skills)
+        {
+            skill.UpdateCooldown();
         }
 
-        // 更新外观（如果有不同贴图）
-        obstacle.UpdateAppearance();
+        // 更新UI
+        //UIManager.Instance.UpdateActionPoints(currentActionPoints);
+        //UIManager.Instance.UpdateSkillCooldowns();
+    }
+    public void SpendActionPoints(int amount)
+    {
+        Point = Mathf.Max(0, Point - amount);
+        // 可以在这里添加UI更新
+    }
+    void Start()
+    {
+        // 自动获取所有子对象中的技能
+        skills.AddRange(GetComponentsInChildren<SkillBase>());
+
+        foreach (var skill in skills)
+        {
+            skill.Initialize(this);
+        }
     }
 }

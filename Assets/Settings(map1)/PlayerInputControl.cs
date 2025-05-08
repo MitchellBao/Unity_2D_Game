@@ -89,6 +89,51 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSkill1"",
+                    ""type"": ""Button"",
+                    ""id"": ""282845f5-3aab-456a-a2b1-045682d6303e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""e59a75b9-c843-4179-9cbe-93e0c63bc700"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe801691-9acf-4578-bf9f-bf6d7d4351c7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a57165e-dede-4da0-a5ad-03b73e93e618"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""434a8524-fe53-4298-9bf4-d9b6013de6d5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -126,31 +171,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""8180e8bd-4097-4f4e-ab88-4523101a6ce9"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""down"",
                     ""id"": ""320bffee-a40b-4347-ac70-c210eb8bc73a"",
                     ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""1c5327b5-f71c-4f60-99c7-4e737386f1d1"",
-                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -170,31 +193,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""2e46982e-44cc-431b-9f0b-c11910bf467a"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""right"",
                     ""id"": ""fcfe95b8-67b9-4526-84b5-5d0bc98d6400"",
                     ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""77bff152-3580-4b21-b6de-dcd0c7e41164"",
-                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -375,6 +376,61 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FinishRound"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34c833dd-b69e-4e8b-bf72-3a679771c4d4"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""UseSkill1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fba07b6-c594-46cf-bbd6-0be178d4ffb0"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6d2b795-3eef-4379-9e6d-1e57193b72bd"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db0a1715-dcf1-41c6-ac9d-b3e324bda1b2"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24096e43-f064-414f-8041-93ad5a54c83f"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -969,6 +1025,11 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         m_GamePlay_MouseClick = m_GamePlay.FindAction("MouseClick", throwIfNotFound: true);
         m_GamePlay_MousePosition = m_GamePlay.FindAction("MousePosition", throwIfNotFound: true);
         m_GamePlay_FinishRound = m_GamePlay.FindAction("FinishRound", throwIfNotFound: true);
+        m_GamePlay_UseSkill1 = m_GamePlay.FindAction("UseSkill1", throwIfNotFound: true);
+        m_GamePlay_Up = m_GamePlay.FindAction("Up", throwIfNotFound: true);
+        m_GamePlay_Down = m_GamePlay.FindAction("Down", throwIfNotFound: true);
+        m_GamePlay_Left = m_GamePlay.FindAction("Left", throwIfNotFound: true);
+        m_GamePlay_Right = m_GamePlay.FindAction("Right", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1055,6 +1116,11 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_MouseClick;
     private readonly InputAction m_GamePlay_MousePosition;
     private readonly InputAction m_GamePlay_FinishRound;
+    private readonly InputAction m_GamePlay_UseSkill1;
+    private readonly InputAction m_GamePlay_Up;
+    private readonly InputAction m_GamePlay_Down;
+    private readonly InputAction m_GamePlay_Left;
+    private readonly InputAction m_GamePlay_Right;
     public struct GamePlayActions
     {
         private @PlayerInputControl m_Wrapper;
@@ -1066,6 +1132,11 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         public InputAction @MouseClick => m_Wrapper.m_GamePlay_MouseClick;
         public InputAction @MousePosition => m_Wrapper.m_GamePlay_MousePosition;
         public InputAction @FinishRound => m_Wrapper.m_GamePlay_FinishRound;
+        public InputAction @UseSkill1 => m_Wrapper.m_GamePlay_UseSkill1;
+        public InputAction @Up => m_Wrapper.m_GamePlay_Up;
+        public InputAction @Down => m_Wrapper.m_GamePlay_Down;
+        public InputAction @Left => m_Wrapper.m_GamePlay_Left;
+        public InputAction @Right => m_Wrapper.m_GamePlay_Right;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1096,6 +1167,21 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @FinishRound.started += instance.OnFinishRound;
             @FinishRound.performed += instance.OnFinishRound;
             @FinishRound.canceled += instance.OnFinishRound;
+            @UseSkill1.started += instance.OnUseSkill1;
+            @UseSkill1.performed += instance.OnUseSkill1;
+            @UseSkill1.canceled += instance.OnUseSkill1;
+            @Up.started += instance.OnUp;
+            @Up.performed += instance.OnUp;
+            @Up.canceled += instance.OnUp;
+            @Down.started += instance.OnDown;
+            @Down.performed += instance.OnDown;
+            @Down.canceled += instance.OnDown;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -1121,6 +1207,21 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @FinishRound.started -= instance.OnFinishRound;
             @FinishRound.performed -= instance.OnFinishRound;
             @FinishRound.canceled -= instance.OnFinishRound;
+            @UseSkill1.started -= instance.OnUseSkill1;
+            @UseSkill1.performed -= instance.OnUseSkill1;
+            @UseSkill1.canceled -= instance.OnUseSkill1;
+            @Up.started -= instance.OnUp;
+            @Up.performed -= instance.OnUp;
+            @Up.canceled -= instance.OnUp;
+            @Down.started -= instance.OnDown;
+            @Down.performed -= instance.OnDown;
+            @Down.canceled -= instance.OnDown;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -1310,6 +1411,11 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         void OnMouseClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnFinishRound(InputAction.CallbackContext context);
+        void OnUseSkill1(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
