@@ -17,13 +17,62 @@ public class PlayerControl : MonoBehaviour
     private float inputCooldown = 0.2f; // 输入缓冲时间 避免切换角色时错误输入
     private float lastSwitchTime;
 
+    private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
+    public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
+
+    
+    private Vector2 SnapTo4Directions(Vector2 dir)//移动方向锁定到四个方向
+    {
+        // 锁定到上下左右四个方向
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            return new Vector2(Mathf.Sign(dir.x), 0);
+        else
+            return new Vector2(0, Mathf.Sign(dir.y));
+    }
+    void AttackObstacle()
+    {
+        Vector2 vec2 = new Vector2(1, 0);
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            _lastMoveDirection,
+            gridSize,
+            obstacleLayer
+        );
+
+        if (hit.collider != null)
+        {
+            Obstacle obstacle = hit.collider.GetComponent<Obstacle>();
+            if (obstacle != null)
+            {
+                obstacle.TakeDamage();
+                Point--; // 消耗行动点
+            }
+        }
+    }
+
+    // 自动触发Instant障碍
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("InstantObstacle"))
+        {
+            col.gameObject.GetComponent<Obstacle>()?.TakeDamage();
+        }
+    }
+
+    //private void UpdateLastDirection(Vector2 currentInput)// 更新方向
+    //{
+    //    // 只有有输入时才更新方向（避免静止时覆盖）
+    //    if (currentInput != Vector2.zero)
+    //    {
+    //        _lastMoveDirection = currentInput.normalized; // 存储标准化方向
+    //    }
+    //}
 
     private void Awake()
     {
         inputControl = new PlayerInputControl();
         mainCamera = Camera.main; // 获取主相机
     }
-
     private void OnEnable()
     {
         inputControl.Enable();
@@ -32,7 +81,6 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.canceled += _ => TogglePlacementMode(false);
         // 新增鼠标点击监听
         inputControl.GamePlay.MouseClick.performed += OnMouseClick;
-        
     }
 
     private void OnDisable()
@@ -63,35 +111,45 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+        //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
-            return; // 非激活状态或仍在冷却中
+            return;
+
+        // 攻击检测（独立冷却）
+        if (Input.GetKeyDown(KeyCode.Space) && Point > 0)
+        {
+            AttackObstacle();
+            return; // 攻击后跳过移动检测
+        }
         if (!isMoving && Point > 0)
         {
             inputDirection = inputControl.GamePlay.Move.ReadValue<Vector2>();
-
+            
             if (inputDirection.x != 0 || inputDirection.y != 0)
             {
                 // 确保单方向移动
-                if (Mathf.Abs(inputDirection.x) > Mathf.Abs(inputDirection.y))
-                {
-                    inputDirection.y = 0;
-                }
-                else
-                {
-                    inputDirection.x = 0;
-                }
+                inputDirection=SnapTo4Directions(inputDirection);
+                _lastMoveDirection = inputDirection;
+                _lastMoveDirection = inputDirection.normalized;
 
-                inputDirection = inputDirection.normalized;
+                // 移动逻辑
+                Vector2 targetPos = rb.position + _lastMoveDirection * gridSize;
                 if (inputDirection.x != 0)
                     transform.localScale = new Vector3(inputDirection.x, 1, 1);
-                Vector2 targetPosition = rb.position + inputDirection * gridSize;
-
-                // 碰撞检测：检查目标位置是否有障碍物
-                if (!Physics2D.OverlapCircle(targetPosition, 0.2f, obstacleLayer))
+                if (!Physics2D.OverlapCircle(targetPos, 0.2f, obstacleLayer))
                 {
-                    StartCoroutine(MoveOneStep(targetPosition));
+                    StartCoroutine(MoveOneStep(targetPos));
                 }
+                //inputDirection = inputDirection.normalized;
+                //Vector2 targetPosition = rb.position + inputDirection * gridSize;
+                //// 碰撞检测：检查目标位置是否有障碍物
+                //if (!Physics2D.OverlapCircle(targetPosition, 0.2f, obstacleLayer))
+                //{
+                //    StartCoroutine(MoveOneStep(targetPosition));
+                //}
+
             }
+
         }
     }
 
@@ -99,8 +157,6 @@ public class PlayerControl : MonoBehaviour
     {
         isMoving = true;
         Point--;
-        //if(inputDirection.x!=0)
-        //    transform.localScale = new Vector3(inputDirection.x, 1, 1);
         Vector2 startPosition = rb.position;
         float moveTime = 0.2f;
         float elapsedTime = 0f;
