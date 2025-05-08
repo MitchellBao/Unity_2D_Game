@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 
 public class PlayerControl : MonoBehaviour
@@ -188,6 +189,40 @@ public class PlayerControl : MonoBehaviour
         isPlacingMode = isActive;
         
     }
+    //private void OnMouseClick(InputAction.CallbackContext context)
+    //{
+    //    if (!isPlacingMode || Point <= 0) return;
+
+    //    Vector2 mousePos = inputControl.GamePlay.MousePosition.ReadValue<Vector2>();
+    //    Ray ray = mainCamera.ScreenPointToRay(mousePos);
+    //    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, groundLayer);
+
+    //    if (hit.collider != null)
+    //    {
+    //        // 关键修改：确保坐标对齐到网格中心
+    //        Vector2 placePos = new Vector2(
+    //            Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
+    //            Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
+    //        );
+
+    //        // 调试显示网格对齐位置（可视化检查）
+    //        Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
+
+    //        if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
+    //        {
+    //            Instantiate(blockPrefab, placePos, Quaternion.identity);
+    //            Point-=2;
+    //        }
+    //    }
+    //}
+    Vector2 GetGridPosition(Vector2 worldPos)
+    {
+        float gridSize = 1.0f; // 需与你的移动格距一致
+        return new Vector2(
+            Mathf.Floor(worldPos.x / gridSize) * gridSize + gridSize * 0.5f,
+            Mathf.Floor(worldPos.y / gridSize) * gridSize + gridSize * 0.5f
+        );
+    }
     private void OnMouseClick(InputAction.CallbackContext context)
     {
         if (!isPlacingMode || Point <= 0) return;
@@ -198,20 +233,38 @@ public class PlayerControl : MonoBehaviour
 
         if (hit.collider != null)
         {
-            // 关键修改：确保坐标对齐到网格中心
-            Vector2 placePos = new Vector2(
-                Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
-                Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
-            );
-
-            // 调试显示网格对齐位置（可视化检查）
-            Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
+            Vector2 placePos = GetGridPosition(hit.point);
 
             if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
             {
-                Instantiate(blockPrefab, placePos, Quaternion.identity);
-                Point-=2;
+                
+                GameObject newBox = Instantiate(blockPrefab, placePos, Quaternion.identity);
+                SetRandomHardness(newBox); // 设置随机硬度
+                newBox.GetComponent<Obstacle>().UpdateAppearance();
+                Point -=2;
             }
         }
+    }
+
+    // 设置箱子随机硬度
+    private void SetRandomHardness(GameObject box)
+    {
+        Obstacle obstacle = box.GetComponent<Obstacle>();
+        if (obstacle == null) return;
+
+        float randomValue = Random.Range(0f, 1f);
+        if (randomValue <= 0.7f) // 70%概率硬度1
+        {
+            obstacle.hardness = Obstacle.HardnessLevel.Fragile;
+            obstacle.health = 1;
+        }
+        else // 30%概率硬度2
+        {
+            obstacle.hardness = Obstacle.HardnessLevel.Sturdy;
+            obstacle.health = 2;
+        }
+
+        // 更新外观（如果有不同贴图）
+        obstacle.UpdateAppearance();
     }
 }

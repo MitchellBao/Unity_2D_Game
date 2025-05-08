@@ -2,6 +2,40 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        health = (int)hardness;
+        ForceUpdateAppearance(); // 初始化时强制更新
+    }
+    // 新增方法：强制更新外观
+    public void ForceUpdateAppearance()
+    {
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        switch (hardness)
+        {
+            case HardnessLevel.Fragile:
+                spriteRenderer.sprite = Sprite1;
+                break;
+            case HardnessLevel.Sturdy:
+                spriteRenderer.sprite = (health >= 2) ? Sprite2 : damagedSprite;
+                break;
+        }
+    }
+
+    public void UpdateAppearance()
+    {
+        if (hardness == HardnessLevel.Sturdy && health == 1)
+        {
+            spriteRenderer.sprite = damagedSprite;
+        }
+        else
+        {
+            ForceUpdateAppearance(); // 其他情况也强制更新
+        }
+    }
     public enum HardnessLevel
     {
         Fragile = 1,  // 1次攻击
@@ -10,10 +44,11 @@ public class Obstacle : MonoBehaviour
 
     [Header("基础设置")]
     public HardnessLevel hardness = HardnessLevel.Fragile;
-    public int health { get; private set; }
+    public int health { get; set; }
 
     [Header("视觉效果")]
-    public Sprite intactSprite;    // 完整状态
+    public Sprite Sprite1;    // 1完整状态
+    public Sprite Sprite2;    // 2完整状态
     public Sprite damagedSprite;   // 受损状态（仅Sturdy需要）
     private SpriteRenderer spriteRenderer;
 
@@ -23,11 +58,7 @@ public class Obstacle : MonoBehaviour
     // Obstacle.cs
     
     
-    void Start()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        health = (int)hardness; // 根据硬度等级初始化血量
-    }
+    
 
     // 被攻击或踩踏时调用
     public void TakeDamage()
@@ -43,13 +74,7 @@ public class Obstacle : MonoBehaviour
         }
     }
 
-    void UpdateAppearance()
-    {
-        if (hardness == HardnessLevel.Sturdy && health == 1)
-        {
-            spriteRenderer.sprite = damagedSprite;
-        }
-    }
+    
 
     void DestroyObstacle()
     {
