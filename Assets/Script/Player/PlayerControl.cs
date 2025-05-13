@@ -15,6 +15,7 @@ public class PlayerControl : MonoBehaviour
     public LayerMask obstacleLayer; // 障碍物层级（在Unity编辑器中设置）
     private bool isMoving = false; // 是否正在移动
     public bool isGetDiamond;
+    public DiamondKinds diamondKind;
     private float inputCooldown = 0.2f; // 输入缓冲时间 避免切换角色时错误输入
     private float lastSwitchTime;
 

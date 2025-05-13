@@ -23,6 +23,7 @@ public class DiamondCheck : MonoBehaviour
        if (Physics2D.OverlapCircle(transform.position, checkRaduis, Diamond))
        {
             PlayerControl.isGetDiamond = true;
+            PlayerControl.diamondKind=other.gameObject.GetComponent<Diamond>().DiamondKinds;
             Destroy(other.gameObject);
        }
     }
