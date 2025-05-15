@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Diamond : MonoBehaviour
-{
+{ 
     public DiamondKinds DiamondKinds;
+    
 }

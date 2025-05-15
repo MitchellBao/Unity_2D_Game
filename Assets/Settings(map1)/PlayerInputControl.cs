@@ -134,6 +134,15 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""GetDiamond"",
+                    ""type"": ""Button"",
+                    ""id"": ""dc102e45-545b-4c07-9b43-1a845f3f82a0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -431,6 +440,17 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17cd856d-d6c1-4204-a02a-2f2cfb46754f"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GetDiamond"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1030,6 +1050,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         m_GamePlay_Down = m_GamePlay.FindAction("Down", throwIfNotFound: true);
         m_GamePlay_Left = m_GamePlay.FindAction("Left", throwIfNotFound: true);
         m_GamePlay_Right = m_GamePlay.FindAction("Right", throwIfNotFound: true);
+        m_GamePlay_GetDiamond = m_GamePlay.FindAction("GetDiamond", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1121,6 +1142,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_Down;
     private readonly InputAction m_GamePlay_Left;
     private readonly InputAction m_GamePlay_Right;
+    private readonly InputAction m_GamePlay_GetDiamond;
     public struct GamePlayActions
     {
         private @PlayerInputControl m_Wrapper;
@@ -1137,6 +1159,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         public InputAction @Down => m_Wrapper.m_GamePlay_Down;
         public InputAction @Left => m_Wrapper.m_GamePlay_Left;
         public InputAction @Right => m_Wrapper.m_GamePlay_Right;
+        public InputAction @GetDiamond => m_Wrapper.m_GamePlay_GetDiamond;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1182,6 +1205,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
+            @GetDiamond.started += instance.OnGetDiamond;
+            @GetDiamond.performed += instance.OnGetDiamond;
+            @GetDiamond.canceled += instance.OnGetDiamond;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -1222,6 +1248,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
+            @GetDiamond.started -= instance.OnGetDiamond;
+            @GetDiamond.performed -= instance.OnGetDiamond;
+            @GetDiamond.canceled -= instance.OnGetDiamond;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -1416,6 +1445,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         void OnDown(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
+        void OnGetDiamond(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

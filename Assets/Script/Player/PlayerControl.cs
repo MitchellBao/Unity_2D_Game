@@ -7,22 +7,72 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
+    
+    public PlayerInputControl inputControl;//输入控制
+    public float gridSize = 1f;// 每格的大小
     public int Point = 100; // 行动点
-    public PlayerInputControl inputControl;
+    [Header("障碍物层级设置")]
+    public LayerMask obstacleLayer; // 障碍物层级（在Unity编辑器中设置）
+    public LayerMask playerLayer;//玩家层级
+    public LayerMask gemLayer;//宝石层级
+    [Header("持有宝石状态设置")]
+    public bool isGetDiamond;
+    public DiamondKinds diamondKind;//持有宝石类别
+
+    private bool isMoving = false; // 是否正在移动
     public Vector2 inputDirection;
     public Rigidbody2D rb;
-    public float gridSize = 1f; // 每格的大小
-    public LayerMask obstacleLayer; // 障碍物层级（在Unity编辑器中设置）
-    private bool isMoving = false; // 是否正在移动
-    public bool isGetDiamond;
-    public DiamondKinds diamondKind;
+    
     private float inputCooldown = 0.2f; // 输入缓冲时间 避免切换角色时错误输入
     private float lastSwitchTime;
 
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
-   
 
+    void Start()
+    {
+        // 自动获取所有子对象中的技能
+        skills.AddRange(GetComponentsInChildren<SkillBase>());
+
+        foreach (var skill in skills)
+        {
+            skill.Initialize(this);
+        }
+    }
+    private void Awake()
+    {
+        inputControl = new PlayerInputControl();
+        //
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        //
+        mainCamera = Camera.main; // 获取主相机
+        InitializeSkills();
+    }
+    private void OnEnable()
+    {
+        inputControl.Enable();
+        // 新增E键输入监听
+        inputControl.GamePlay.PlaceBlock.performed += _ => TogglePlacementMode(true);
+        inputControl.GamePlay.PlaceBlock.canceled += _ => TogglePlacementMode(false);
+        // 新增鼠标点击监听
+        inputControl.GamePlay.MouseClick.performed += OnMouseClick;
+        //技能监听
+        inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0); // 数字1 -> 技能1
+        //偷宝石检测
+        inputControl.GamePlay.GetDiamond.performed += _ => TryKnockdown();
+    }
+    private void OnDisable()
+    {
+        inputControl.Disable();
+        // 移除监听
+        inputControl.GamePlay.PlaceBlock.performed -= _ => TogglePlacementMode(true);
+        inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
+        inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
+        inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
+        inputControl.GamePlay.GetDiamond.performed -= _ => TryKnockdown();
+    }
+
+    //移动相关
     private Vector2 SnapTo4Directions(Vector2 dir)//移动方向锁定到四个方向
     {
         // 锁定到上下左右四个方向
@@ -31,7 +81,271 @@ public class PlayerControl : MonoBehaviour
         else
             return new Vector2(0, Mathf.Sign(dir.y));
     }
-    void AttackObstacle()
+    IEnumerator MoveOneStep(Vector2 targetPosition)
+    {
+        isMoving = true;
+        Point--;
+        Vector2 startPosition = rb.position;
+        float moveTime = 0.2f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < moveTime)
+        {
+            rb.position = Vector2.Lerp(startPosition, targetPosition, elapsedTime / moveTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.position = targetPosition;
+        isMoving = false;
+    }
+
+
+    //宝石相关
+    [Header("宝石预制体设置")]
+    public GameObject redGemPrefab;
+    public GameObject blueGemPrefab;
+    public GameObject greenGemPrefab;
+    public GameObject poisonousGemPrefab;
+    [Header("持有宝石颜色设置")]
+    public Color hasGemColor = Color.magenta; // 持有宝石时的颜色
+    public Color noGemColor = Color.white;   // 无宝石时的默认颜色
+
+    private SpriteRenderer spriteRenderer;
+
+    private void TryKnockdown()
+    {
+        if (Point <= 0 ) return;
+
+        Collider2D[] players = Physics2D.OverlapCircleAll(
+            transform.position,
+            gridSize * 2.5f,
+            playerLayer);
+
+        foreach (Collider2D playerCol in players)
+        {
+            if (playerCol.gameObject != gameObject)
+            {
+                PlayerControl otherPlayer = playerCol.GetComponent<PlayerControl>();
+                if (otherPlayer != null && otherPlayer.isGetDiamond)
+                {
+                    if (TryKnockdownGemFromPlayer(otherPlayer))
+                    {
+                        Point--; // 只有成功击落才消耗点数
+                        return; // 每次只处理一个玩家
+                    }
+                }
+            }
+        }
+    }
+
+  
+    // 世界坐标转网格索引
+    private Vector2 WorldToGridIndex(Vector2 worldPos)
+    {
+        return new Vector2(
+            Mathf.Floor(worldPos.x / gridSize),
+            Mathf.Floor(worldPos.y / gridSize)
+        );
+    }
+
+    // 网格索引转世界坐标(中心点)
+    private Vector2 GridIndexToWorldCenter(Vector2 gridIndex)
+    {
+        return new Vector2(
+            gridIndex.x * gridSize + gridSize * 0.5f,
+            gridIndex.y * gridSize + gridSize * 0.5f
+        );
+    }
+    private bool TryKnockdownGemFromPlayer(PlayerControl otherPlayer)
+    {
+        Vector2 myPos = transform.position;
+        Vector2 otherPos = otherPlayer.transform.position;
+        Vector2 myGrid = WorldToGridIndex(myPos);
+        Vector2 otherGrid = WorldToGridIndex(otherPos);
+
+        float distance = Vector2.Distance(myPos, otherPos);
+        DiamondKinds otherGemKind = otherPlayer.diamondKind;
+
+        // 情况1：直接相邻(距离1)
+        if (distance <= gridSize * 1.1f)
+        {
+            // 直接从对方获取宝石
+            otherPlayer.LoseGem();
+            isGetDiamond = true;
+            diamondKind = otherGemKind;
+            return true;
+        }
+
+        // 情况2：直线距离2格无遮挡
+        if (distance <= gridSize * 2.1f &&
+            IsStraightLine(myPos, otherPos) &&
+            !Physics2D.Linecast(myPos, otherPos, obstacleLayer))
+        {
+            // 计算中间网格
+            Vector2 midGrid = new Vector2(
+                Mathf.Round((myGrid.x + otherGrid.x) / 2),
+                Mathf.Round((myGrid.y + otherGrid.y) / 2)
+            );
+            otherPlayer.LoseGem();
+            DropGem(GridIndexToWorldCenter(midGrid), otherGemKind);
+            return true;
+        }
+
+        // 情况3：斜向相邻(距离√2)
+        if (distance <= gridSize * 1.5f)
+        {
+            Vector2[] possibleDrops = GetRemainingGridCorners(myGrid, otherGrid);
+            Vector2? validDropPos = FindValidDropPosition(possibleDrops);
+
+            if (validDropPos.HasValue)
+            {
+                otherPlayer.LoseGem();
+                DropGem(GridIndexToWorldCenter(validDropPos.Value), otherGemKind);
+                return true;
+            }
+            return false;
+        }
+
+        // 情况4：无遮挡(任何距离)
+        if (!Physics2D.Linecast(myPos, otherPos, obstacleLayer))
+        {
+            otherPlayer.LoseGem();
+            DropGem(myPos, otherGemKind);
+            return true;
+        }
+        Debug.Log("没有满足任何击落条件");
+        return false;
+    }
+    private bool IsStraightLine(Vector2 pos1, Vector2 pos2)
+    {
+        return Mathf.Approximately(pos1.x, pos2.x) ||
+               Mathf.Approximately(pos1.y, pos2.y);
+    }
+
+    private Vector2[] GetRemainingGridCorners(Vector2 gridIndex1, Vector2 gridIndex2)
+    {
+        // 计算两个玩家的相对方位
+        bool targetIsRight = gridIndex2.x > gridIndex1.x;
+        bool targetIsAbove = gridIndex2.y > gridIndex1.y;
+
+        // 根据方位确定剩余两个角落
+        if (targetIsRight && targetIsAbove) // 目标在右上
+        {
+            return new Vector2[]
+            {
+            new Vector2(gridIndex1.x, gridIndex2.y), // 左上
+            new Vector2(gridIndex2.x, gridIndex1.y)  // 右下
+            };
+        }
+        else if (targetIsRight && !targetIsAbove) // 目标在右下
+        {
+            return new Vector2[]
+            {
+            new Vector2(gridIndex1.x, gridIndex2.y), // 左下
+            new Vector2(gridIndex2.x, gridIndex1.y)  // 右上
+            };
+        }
+        else if (!targetIsRight && targetIsAbove) // 目标在左上
+        {
+            return new Vector2[]
+            {
+            new Vector2(gridIndex1.x, gridIndex2.y), // 左下
+            new Vector2(gridIndex2.x, gridIndex1.y)  // 右上
+            };
+        }
+        else // 目标在左下
+        {
+            return new Vector2[]
+            {
+            new Vector2(gridIndex1.x, gridIndex2.y), // 左上
+            new Vector2(gridIndex2.x, gridIndex1.y)  // 右下
+            };
+        }
+    }
+    
+    private Vector2? FindValidDropPosition(Vector2[] gridIndices)
+    {
+        // 收集所有有效位置
+        List<Vector2> validPositions = new List<Vector2>();
+
+        foreach (Vector2 gridIndex in gridIndices)
+        {
+            Vector2 worldPos = GridIndexToWorldCenter(gridIndex);
+
+            // 检查该位置是否被障碍物或其他宝石占据
+            bool positionBlocked = Physics2D.OverlapCircle(worldPos, 0.2f, obstacleLayer) != null ||
+                                  Physics2D.OverlapCircle(worldPos, 0.2f, gemLayer) != null;
+
+            if (!positionBlocked)
+            {
+                validPositions.Add(gridIndex);
+            }
+        }
+
+        // 随机选择一个有效位置
+        if (validPositions.Count > 0)
+        {
+            return validPositions[Random.Range(0, validPositions.Count)];
+        }
+        Debug.LogWarning("没有找到有效的掉落位置");
+        return null;
+    }
+    
+
+    // 根据种类获取对应宝石预制体
+    private GameObject GetGemPrefabByKind(DiamondKinds kind)
+    {
+        switch (kind)
+        {
+            case DiamondKinds.redDiamond:
+                return redGemPrefab;
+            case DiamondKinds.blueDiamond:
+                return blueGemPrefab;
+            case DiamondKinds.greenDiamond:
+                return greenGemPrefab;
+            case DiamondKinds.poisonousDiamond:
+                return poisonousGemPrefab;
+            // 添加更多种类...
+            default:
+                Debug.LogWarning($"未知宝石种类: {kind}, 使用红色宝石作为默认");
+                return redGemPrefab;
+        }
+    }
+    //宝石掉落
+    private void DropGem(Vector2 position, DiamondKinds kind)
+    {
+        GameObject prefab = GetGemPrefabByKind(kind);
+
+        if (prefab != null)
+        {
+            GameObject newGem = Instantiate(prefab, position, Quaternion.identity);
+
+            // 确保有Diamond组件并设置种类(即使预制体已有)
+            Diamond diamondComp = newGem.GetComponent<Diamond>();
+            if (diamondComp == null)
+            {
+                diamondComp = newGem.AddComponent<Diamond>();
+            }
+            diamondComp.DiamondKinds = kind;
+
+            // 确保有碰撞体
+            if (newGem.GetComponent<Collider2D>() == null)
+            {
+                newGem.AddComponent<BoxCollider2D>();
+            }
+
+        }
+        else
+        {
+            Debug.LogError($"{kind}宝石预制体未分配！请在Inspector中设置");
+        }
+    }
+    public void LoseGem()
+    {
+        isGetDiamond = false;
+    }
+    void AttackObstacle()//摧毁箱子
     {
         Vector2 vec2 = new Vector2(1, 0);
         RaycastHit2D hit = Physics2D.Raycast(
@@ -52,57 +366,16 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    // 自动触发Instant障碍
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.CompareTag("InstantObstacle"))
-        {
-            col.gameObject.GetComponent<Obstacle>()?.TakeDamage();
-        }
-    }
-
-    //private void UpdateLastDirection(Vector2 currentInput)// 更新方向
-    //{
-    //    // 只有有输入时才更新方向（避免静止时覆盖）
-    //    if (currentInput != Vector2.zero)
-    //    {
-    //        _lastMoveDirection = currentInput.normalized; // 存储标准化方向
-    //    }
-    //}
-
-    private void Awake()
-    {
-        inputControl = new PlayerInputControl();
-        mainCamera = Camera.main; // 获取主相机
-        InitializeSkills();
-    }
-    private void OnEnable()
-    {
-        inputControl.Enable();
-        // 新增E键输入监听
-        inputControl.GamePlay.PlaceBlock.performed += _ => TogglePlacementMode(true);
-        inputControl.GamePlay.PlaceBlock.canceled += _ => TogglePlacementMode(false);
-        // 新增鼠标点击监听
-        inputControl.GamePlay.MouseClick.performed += OnMouseClick;
-        inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0); // 数字1 -> 技能1
-    }
-
-    private void OnDisable()
-    {
-        inputControl.Disable();
-        // 移除监听
-        inputControl.GamePlay.PlaceBlock.performed -= _ => TogglePlacementMode(true);
-        inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
-        inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
-        inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
-    }
     private bool isActive = false;
 
     public void SetActive(bool active)
     {
         
         isActive = active;
-        GetComponent<SpriteRenderer>().color = active ? Color.white : Color.gray;
+        if(active&&isGetDiamond) GetComponent<SpriteRenderer>().color =  Color.cyan;
+        if(isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.white;
+        if (!isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.gray;
+        if (!isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.black;
         if (active)
         {
             Point += 3;
@@ -116,11 +389,16 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+        //没做ui之前的可视化宝石持有
+        if (isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.cyan;
+        if (isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.white;
+        if (!isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.gray;
+        if (!isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.black;
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
             return;
         //技能检测
-        if(isInSkillTargetingMode)
+        if (isInSkillTargetingMode)
         {
             HandleSkillTargeting();
             return;
@@ -167,33 +445,12 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    IEnumerator MoveOneStep(Vector2 targetPosition)
-    {
-        isMoving = true;
-        Point--;
-        Vector2 startPosition = rb.position;
-        float moveTime = 0.2f;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < moveTime)
-        {
-            rb.position = Vector2.Lerp(startPosition, targetPosition, elapsedTime / moveTime);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        rb.position = targetPosition;
-        isMoving = false;
-    }
+    
     [Header("放置方块设置")]
     public GameObject blockPrefab; // 在Inspector中拖入你的方块预制体
     public LayerMask groundLayer; // 设置地面层级（用于鼠标射线检测）
     private bool isPlacingMode = false; // 是否处于放置模式
     private Camera mainCamera;
-
-  
-
-    
 
     // 切换放置模式
     private void TogglePlacementMode(bool isActive)
@@ -203,7 +460,7 @@ public class PlayerControl : MonoBehaviour
     }
     private void OnMouseClick(InputAction.CallbackContext context)
     {
-        if (!isPlacingMode || Point <= 0) return;
+        if (!isPlacingMode || Point-2 < 0) return;
 
         Vector2 mousePos = inputControl.GamePlay.MousePosition.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(mousePos);
@@ -307,14 +564,5 @@ public class PlayerControl : MonoBehaviour
         Point = Mathf.Max(0, Point - amount);
         // 可以在这里添加UI更新
     }
-    void Start()
-    {
-        // 自动获取所有子对象中的技能
-        skills.AddRange(GetComponentsInChildren<SkillBase>());
-
-        foreach (var skill in skills)
-        {
-            skill.Initialize(this);
-        }
-    }
+    
 }
