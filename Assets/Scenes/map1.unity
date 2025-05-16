@@ -14887,7 +14887,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  skills: []
+  skills:
+  - {fileID: 1534913368}
 --- !u!114 &1384511836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23708,7 +23709,7 @@ MonoBehaviour:
   actionPointCost: 2
   icon: {fileID: 0}
   owner: {fileID: 0}
-  teleportDistance: 2
+  teleportDistance: 3
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
