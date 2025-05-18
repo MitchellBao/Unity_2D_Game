@@ -271,6 +271,58 @@ MonoBehaviour:
   damagedSprite: {fileID: 21300000, guid: deea6a4e2bc9de7458bba581d6676fef, type: 3}
   destroyEffect: {fileID: 0}
   destroySound: {fileID: 0}
+--- !u!1 &88088887
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 88088888}
+  - component: {fileID: 88088889}
+  m_Layer: 7
+  m_Name: TimefreezeSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &88088888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88088887}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1385200739}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &88088889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88088887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed3208a228bfd5439d61f8f8949cb58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: "\u65F6\u95F4\u51BB\u7ED3"
+  description: "\u51BB\u7ED3\u5BF9\u624B1\u56DE\u5408\u884C\u52A8\uFF08\u65E0\u6CD5\u4F7F\u7528\u6216\u83B7\u5F97\u884C\u52A8\u70B9\uFF09
+    \u81EA\u5DF1\u4E0B\u4E2A\u56DE\u5408\u5C11\u83B7\u5F97\u4E00\u70B9\u884C\u52A8\u70B9\uFF0C\u5BF9\u624B\u4FDD\u7559\u5F53\u524D\u884C\u52A8\u70B9"
+  cooldownRounds: 4
+  actionPointCost: 3
+  icon: {fileID: 0}
+  owner: {fileID: 0}
+  nextRoundPenalty: 1
 --- !u!1 &131516042
 GameObject:
   m_ObjectHideFlags: 0
@@ -14889,6 +14941,9 @@ MonoBehaviour:
     m_Bits: 64
   skills:
   - {fileID: 1534913368}
+  isFrozen: 0
+  frozenRoundsRemaining: 0
+  nextRoundAPReduction: 0
 --- !u!114 &1384511836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14979,7 +15034,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  skills: []
+  skills:
+  - {fileID: 88088889}
+  isFrozen: 0
+  frozenRoundsRemaining: 0
+  nextRoundAPReduction: 0
 --- !u!61 &1385200736
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15116,7 +15175,8 @@ Transform:
   m_LocalPosition: {x: 9.5, y: -5.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 88088888}
   m_Father: {fileID: 1581248977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1385200740

@@ -58,6 +58,7 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.MouseClick.performed += OnMouseClick;
         //技能监听
         inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0); // 数字1 -> 技能1
+        inputControl.GamePlay.UseSkill2.performed += _ => TryUseSkill(1); // 数字2 -> 技能2
         //偷宝石检测
         inputControl.GamePlay.GetDiamond.performed += _ => TryKnockdown();
     }
@@ -69,6 +70,7 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
         inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
         inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
+        inputControl.GamePlay.UseSkill2.performed -= _ => TryUseSkill(1);
         inputControl.GamePlay.GetDiamond.performed -= _ => TryKnockdown();
     }
 
@@ -404,8 +406,10 @@ public class PlayerControl : MonoBehaviour
             return;
         }
         // 添加技能快捷键 (示例：数字键1-4)
-        if (Input.GetKeyDown(KeyCode.Alpha1)) TryUseSkill(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) TryUseSkill(1);
+        if (inputControl.GamePlay.UseSkill2.triggered || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            TryUseSkill(1); // 假设技能列表第二个是时间冻结
+        }
 
         // 攻击检测（独立冷却）
         if (Input.GetKeyDown(KeyCode.Space) && Point > 0)
@@ -547,12 +551,27 @@ public class PlayerControl : MonoBehaviour
         //    (currentActiveSkill as EngineerQuickBuildSkill)?.CancelSkill();
         //}
     }
+    public void AddActionPoints(int amount)
+    {
+        Point = Mathf.Min(Point + amount, 6); // 行动点上限为6
+                                              // 可以在这里添加UI更新逻辑
+    }
     public void OnRoundStart()
     {
         // 更新所有技能冷却
         foreach (var skill in skills)
         {
             skill.UpdateCooldown();
+        }
+        if (isFrozen)
+        {
+            frozenRoundsRemaining--;
+            if (frozenRoundsRemaining <= 0)
+            {
+                isFrozen = false;
+                Debug.Log($"{name} 解冻了!");
+            }
+            return; // 被冻结的玩家不执行回合逻辑
         }
 
         // 更新UI
@@ -564,5 +583,9 @@ public class PlayerControl : MonoBehaviour
         Point = Mathf.Max(0, Point - amount);
         // 可以在这里添加UI更新
     }
-    
+    [Header("冻结状态")]
+    public bool isFrozen = false;
+    public int frozenRoundsRemaining = 0;
+    public int nextRoundAPReduction = 0;
+
 }
