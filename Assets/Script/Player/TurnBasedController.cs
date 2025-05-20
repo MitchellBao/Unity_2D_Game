@@ -23,7 +23,7 @@ public class TurnBasedController : MonoBehaviour
     private void Update()
     {
         // 持续检测当前角色行动点是否耗尽
-        if (players[currentPlayerIndex].Point <= 0)
+        if (players[currentPlayerIndex].Point <= 0&& !players[currentPlayerIndex].isFrozen)
         {
             SwitchCharacter();
         }
@@ -37,31 +37,14 @@ public class TurnBasedController : MonoBehaviour
     // 切换角色控制权
     private void SwitchCharacter()
     {
+        // 检查是否冻结
+        if (players[currentPlayerIndex].isFrozen)
+        {
+            players[currentPlayerIndex].isFrozen = false;
+            Debug.Log($"{name} 解冻了!");
+        }
         currentPlayerIndex = (currentPlayerIndex + 1) % players.Length;
         PlayerControl nextPlayer = players[currentPlayerIndex];
-
-        // 检查是否冻结
-        if (nextPlayer.isFrozen)
-        {
-            // 减少冻结回合数
-            nextPlayer.frozenRoundsRemaining--;
-
-            // 如果冻结结束，恢复状态
-            if (nextPlayer.frozenRoundsRemaining <= 0)
-            {
-                nextPlayer.isFrozen = false;
-                Debug.Log($"{nextPlayer.name} 解冻！");
-            }
-            else
-            {
-                Debug.Log($"{nextPlayer.name} 仍被冻结，剩余回合: {nextPlayer.frozenRoundsRemaining}");
-            }
-
-            // 直接跳过冻结玩家的回合，继续切换
-            SwitchCharacter();
-            return;
-        }
-
         // 正常回合逻辑
         nextPlayer.OnRoundStart();
         UpdateControlState();

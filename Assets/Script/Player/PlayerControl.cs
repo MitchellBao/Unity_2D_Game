@@ -42,9 +42,7 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         inputControl = new PlayerInputControl();
-        //
         spriteRenderer = GetComponent<SpriteRenderer>();
-        //
         mainCamera = Camera.main; // 获取主相机
         InitializeSkills();
     }
@@ -374,31 +372,39 @@ public class PlayerControl : MonoBehaviour
     {
         
         isActive = active;
-        if(active&&isGetDiamond) GetComponent<SpriteRenderer>().color =  Color.cyan;
-        if(isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.white;
-        if (!isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.gray;
-        if (!isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.black;
-        if (active)
+        if (active&&!isFrozen)
         {
-            Point += 3;
+            if(!NegativeImpact)
+                Point += 3;
+            else Point += 2;
             if (Point > 6)
             {
                 Point = 6;
             }
 
-            lastSwitchTime = Time.time;// 记录激活时间
+            //lastSwitchTime = Time.time;// 记录激活时间
         }
+        lastSwitchTime = Time.time;// 记录激活时间
     }
     private void Update()
     {
+
         //没做ui之前的可视化宝石持有
         if (isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.cyan;
         if (isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.white;
         if (!isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.gray;
         if (!isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.black;
+        //
+        if (isFrozen) GetComponent<SpriteRenderer>().color = Color.blue;
+        //
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
             return;
+        if(isFrozen)
+        {
+            //isFrozen = false;
+            return;
+        }
         //技能检测
         if (isInSkillTargetingMode)
         {
@@ -436,13 +442,6 @@ public class PlayerControl : MonoBehaviour
                 {
                     StartCoroutine(MoveOneStep(targetPos));
                 }
-                //inputDirection = inputDirection.normalized;
-                //Vector2 targetPosition = rb.position + inputDirection * gridSize;
-                //// 碰撞检测：检查目标位置是否有障碍物
-                //if (!Physics2D.OverlapCircle(targetPosition, 0.2f, obstacleLayer))
-                //{
-                //    StartCoroutine(MoveOneStep(targetPosition));
-                //}
 
             }
 
@@ -551,27 +550,12 @@ public class PlayerControl : MonoBehaviour
         //    (currentActiveSkill as EngineerQuickBuildSkill)?.CancelSkill();
         //}
     }
-    public void AddActionPoints(int amount)
-    {
-        Point = Mathf.Min(Point + amount, 6); // 行动点上限为6
-                                              // 可以在这里添加UI更新逻辑
-    }
     public void OnRoundStart()
     {
         // 更新所有技能冷却
         foreach (var skill in skills)
         {
             skill.UpdateCooldown();
-        }
-        if (isFrozen)
-        {
-            frozenRoundsRemaining--;
-            if (frozenRoundsRemaining <= 0)
-            {
-                isFrozen = false;
-                Debug.Log($"{name} 解冻了!");
-            }
-            return; // 被冻结的玩家不执行回合逻辑
         }
 
         // 更新UI
@@ -585,7 +569,6 @@ public class PlayerControl : MonoBehaviour
     }
     [Header("冻结状态")]
     public bool isFrozen = false;
-    public int frozenRoundsRemaining = 0;
-    public int nextRoundAPReduction = 0;
+    public bool NegativeImpact = false;
 
 }

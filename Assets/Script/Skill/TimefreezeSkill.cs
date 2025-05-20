@@ -22,11 +22,6 @@ public class TimefreezeSkill : SkillBase
     {
         //找到对手玩家
         PlayerControl opponent = FindOpponent();
-        if (opponent == null)
-        {
-            Debug.LogWarning("未找到对手！");
-            return;
-        }
         if (opponent.isFrozen)
         {
             Debug.LogWarning("对手已被冻结，不能重复冻结");
@@ -56,7 +51,6 @@ public class TimefreezeSkill : SkillBase
     {
         // 获取对手的PlayerControl组件
         opponent.isFrozen = true;
-        opponent.frozenRoundsRemaining = 1;
 
         Debug.Log($"{owner.name} 冻结了 {opponent.name}!");
     }
@@ -64,9 +58,8 @@ public class TimefreezeSkill : SkillBase
     private void ApplyNextRoundPenalty()
     {
         // 设置下回合行动点惩罚
-        owner.nextRoundAPReduction = nextRoundPenalty;
-
-        Debug.Log($"下回合将减少 {nextRoundPenalty} 点行动点");
+        owner.NegativeImpact = true;
+        Debug.Log($"下回合将减少 1 点行动点");
     }
 
 
