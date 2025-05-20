@@ -14,7 +14,7 @@ public class TimefreezeSkill : SkillBase
         skillName = "时间冻结";
         description = "冻结对手1回合行动，自己下回合少获得1行动点";
         cooldownRounds = 3; // 冷却3回合
-        actionPointCost = 3; // 消耗4行动点
+        actionPointCost = 3; // 消耗3行动点
     }
    
     protected override void ExecuteSkill()

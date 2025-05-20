@@ -369,6 +369,7 @@ public class PlayerControl : MonoBehaviour
         isActive = active;
         if (active && !isFrozen)
         {
+            inputControl.Enable();
             if (!NegativeImpact)
                 Point += 3;
             else
@@ -380,7 +381,10 @@ public class PlayerControl : MonoBehaviour
             {
                 Point = 6;
             }
-            
+        }
+        else
+        {
+            inputControl.Disable(); // 关键！禁用非活跃玩家的输入
         }
         lastSwitchTime = Time.time;// 记录激活时间
     }
@@ -398,8 +402,8 @@ public class PlayerControl : MonoBehaviour
         if (isFrozen) GetComponent<SpriteRenderer>().color = Color.blue;
         //
         //避免被冻恢复以后卡主
-        EnterSkillTargetingMode(currentActiveSkill);
-        ExitSkillTargetingMode();
+        //EnterSkillTargetingMode(currentActiveSkill);
+        //ExitSkillTargetingMode();
 
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
