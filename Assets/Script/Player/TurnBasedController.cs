@@ -34,7 +34,7 @@ public class TurnBasedController : MonoBehaviour
         inputControl.GamePlay.FinishRound.performed -= _ => SwitchCharacter();
     }
 
-    // 切换角色控制权
+    //切换角色控制权
     private void SwitchCharacter()
     {
         // 检查是否冻结
@@ -50,6 +50,7 @@ public class TurnBasedController : MonoBehaviour
         UpdateControlState();
         Debug.Log($"切换到角色: {currentPlayerIndex + 1}");
     }
+    
     // 更新角色输入状态
     private void UpdateControlState()
     {

@@ -7,7 +7,6 @@ using UnityEngine;
 public class TimefreezeSkill : SkillBase
 {
     [Header("时间冻结设置")]
-    public int nextRoundPenalty = 1; // 下回合行动点惩罚值
     private PlayerControl frozenEnemy; // 被冻结的对手
     private void Awake()
     {
@@ -15,7 +14,7 @@ public class TimefreezeSkill : SkillBase
         skillName = "时间冻结";
         description = "冻结对手1回合行动，自己下回合少获得1行动点";
         cooldownRounds = 3; // 冷却3回合
-        actionPointCost = 4; // 消耗4行动点
+        actionPointCost = 3; // 消耗4行动点
     }
    
     protected override void ExecuteSkill()
@@ -29,7 +28,6 @@ public class TimefreezeSkill : SkillBase
         }
         // 冻结对手
         FreezeOpponent(opponent);
-
         // 设置自己下回合的行动点惩罚
         ApplyNextRoundPenalty();
 

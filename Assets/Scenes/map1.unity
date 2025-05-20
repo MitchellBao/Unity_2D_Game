@@ -322,7 +322,6 @@ MonoBehaviour:
   actionPointCost: 3
   icon: {fileID: 0}
   owner: {fileID: 0}
-  nextRoundPenalty: 1
 --- !u!1 &131516042
 GameObject:
   m_ObjectHideFlags: 0
@@ -13431,7 +13430,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.88, y: 1.67, z: -10}
+  m_LocalPosition: {x: 0.5, y: 1.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14933,8 +14932,6 @@ MonoBehaviour:
   blueGemPrefab: {fileID: 444485955}
   greenGemPrefab: {fileID: 649481970}
   poisonousGemPrefab: {fileID: 895806093}
-  hasGemColor: {r: 1, g: 0, b: 1, a: 1}
-  noGemColor: {r: 1, g: 1, b: 1, a: 1}
   blockPrefab: {fileID: 77234807}
   groundLayer:
     serializedVersion: 2
@@ -14942,8 +14939,7 @@ MonoBehaviour:
   skills:
   - {fileID: 1534913368}
   isFrozen: 0
-  frozenRoundsRemaining: 0
-  nextRoundAPReduction: 0
+  NegativeImpact: 0
 --- !u!114 &1384511836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15028,8 +15024,6 @@ MonoBehaviour:
   blueGemPrefab: {fileID: 444485955}
   greenGemPrefab: {fileID: 649481970}
   poisonousGemPrefab: {fileID: 895806093}
-  hasGemColor: {r: 1, g: 0, b: 1, a: 1}
-  noGemColor: {r: 1, g: 1, b: 1, a: 1}
   blockPrefab: {fileID: 77234807}
   groundLayer:
     serializedVersion: 2
@@ -15037,8 +15031,7 @@ MonoBehaviour:
   skills:
   - {fileID: 88088889}
   isFrozen: 0
-  frozenRoundsRemaining: 0
-  nextRoundAPReduction: 0
+  NegativeImpact: 0
 --- !u!61 &1385200736
 BoxCollider2D:
   m_ObjectHideFlags: 0

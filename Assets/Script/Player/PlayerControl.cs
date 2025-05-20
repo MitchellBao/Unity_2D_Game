@@ -364,27 +364,30 @@ public class PlayerControl : MonoBehaviour
     }
 
     private bool isActive = false;
-
     public void SetActive(bool active)
     {
-        
         isActive = active;
-        if (active&&!isFrozen)
+        if (active && !isFrozen)
         {
-            if(!NegativeImpact)
+            if (!NegativeImpact)
                 Point += 3;
-            else Point += 2;
+            else
+            {
+                Point += 2;
+                NegativeImpact = false;
+            }
             if (Point > 6)
             {
                 Point = 6;
             }
-
-            //lastSwitchTime = Time.time;// 记录激活时间
+            
         }
         lastSwitchTime = Time.time;// 记录激活时间
     }
+
     private void Update()
     {
+        
 
         //没做ui之前的可视化宝石持有
         if (isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.cyan;
@@ -394,10 +397,15 @@ public class PlayerControl : MonoBehaviour
         //
         if (isFrozen) GetComponent<SpriteRenderer>().color = Color.blue;
         //
+        //避免被冻恢复以后卡主
+        EnterSkillTargetingMode(currentActiveSkill);
+        ExitSkillTargetingMode();
+
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
             return;
-        if(isFrozen)
+        
+        if (isFrozen)
         {
             //isFrozen = false;
             return;
