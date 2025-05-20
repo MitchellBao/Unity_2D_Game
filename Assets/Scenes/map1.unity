@@ -14862,6 +14862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87de791b3b4d4f941a5929ae27da93aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerIndex: 0
   gridSize: 1
   Point: 0
   obstacleLayer:
@@ -14954,6 +14955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87de791b3b4d4f941a5929ae27da93aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerIndex: 1
   gridSize: 1
   Point: 0
   obstacleLayer:

@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
-    
+    [Header("玩家索引设置")]
+    public int playerIndex = 0; // 0=玩家1, 1=玩家2
     public PlayerInputControl inputControl;//输入控制
     public float gridSize = 1f;// 每格的大小
     public int Point = 100; // 行动点
@@ -28,7 +29,6 @@ public class PlayerControl : MonoBehaviour
 
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
-
     void Start()
     {
         // 自动获取所有子对象中的技能
@@ -46,6 +46,7 @@ public class PlayerControl : MonoBehaviour
         mainCamera = Camera.main; // 获取主相机
         InitializeSkills();
     }
+   
     private void OnEnable()
     {
         inputControl.Enable();
@@ -55,8 +56,14 @@ public class PlayerControl : MonoBehaviour
         // 新增鼠标点击监听
         inputControl.GamePlay.MouseClick.performed += OnMouseClick;
         //技能监听
-        inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0); // 数字1 -> 技能1
-        inputControl.GamePlay.UseSkill2.performed += _ => TryUseSkill(1); // 数字2 -> 技能2
+        if (playerIndex == 0) // 玩家1
+        {
+            inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0);
+        }
+        else if (playerIndex == 1) // 玩家2
+        {
+            inputControl.GamePlay.UseSkill2.performed += _ => TryUseSkill(0);
+        }
         //偷宝石检测
         inputControl.GamePlay.GetDiamond.performed += _ => TryKnockdown();
     }
@@ -68,7 +75,7 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.PlaceBlock.canceled -= _ => TogglePlacementMode(false);
         inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
         inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
-        inputControl.GamePlay.UseSkill2.performed -= _ => TryUseSkill(1);
+        inputControl.GamePlay.UseSkill2.performed -= _ => TryUseSkill(0);
         inputControl.GamePlay.GetDiamond.performed -= _ => TryKnockdown();
     }
 
@@ -291,7 +298,7 @@ public class PlayerControl : MonoBehaviour
     
 
     // 根据种类获取对应宝石预制体
-    private GameObject GetGemPrefabByKind(DiamondKinds kind)
+    public GameObject GetGemPrefabByKind(DiamondKinds kind)
     {
         switch (kind)
         {
@@ -421,10 +428,10 @@ public class PlayerControl : MonoBehaviour
             return;
         }
         // 添加技能快捷键 (示例：数字键1-4)
-        if (inputControl.GamePlay.UseSkill2.triggered || Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            TryUseSkill(1); // 假设技能列表第二个是时间冻结
-        }
+        //if (inputControl.GamePlay.UseSkill2.triggered || Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    TryUseSkill(1); // 假设技能列表第二个是时间冻结
+        //}
 
         // 攻击检测（独立冷却）
         if (Input.GetKeyDown(KeyCode.Space) && Point > 0)
