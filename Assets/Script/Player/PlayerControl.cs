@@ -59,10 +59,12 @@ public class PlayerControl : MonoBehaviour
         if (playerIndex == 0) // Íæ¼Ò1
         {
             inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0);
+            inputControl.GamePlay.UseSkill3.performed += _ => TryUseSkill(1);
         }
         else if (playerIndex == 1) // Íæ¼Ò2
         {
             inputControl.GamePlay.UseSkill2.performed += _ => TryUseSkill(0);
+            inputControl.GamePlay.UseSkill4.performed += _ => TryUseSkill(1);
         }
         //Íµ±¦Ê¯¼ì²â
         inputControl.GamePlay.GetDiamond.performed += _ => TryKnockdown();
@@ -76,6 +78,8 @@ public class PlayerControl : MonoBehaviour
         inputControl.GamePlay.MouseClick.performed -= OnMouseClick;
         inputControl.GamePlay.UseSkill1.performed -= _ => TryUseSkill(0);
         inputControl.GamePlay.UseSkill2.performed -= _ => TryUseSkill(0);
+        inputControl.GamePlay.UseSkill3.performed -= _ => TryUseSkill(1);
+        inputControl.GamePlay.UseSkill4.performed -= _ => TryUseSkill(1);
         inputControl.GamePlay.GetDiamond.performed -= _ => TryKnockdown();
     }
 

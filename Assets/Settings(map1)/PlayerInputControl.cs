@@ -152,6 +152,24 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSkill3"",
+                    ""type"": ""Button"",
+                    ""id"": ""8da661f8-44b8-40c5-aceb-e722afe7e931"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSkill4"",
+                    ""type"": ""Button"",
+                    ""id"": ""4133a4e2-edc5-4ce8-b9af-c7591b4dc93a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -471,6 +489,28 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""UseSkill2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c53e3802-44b0-4df9-a221-de9ee2125ac1"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""UseSkill3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""975414ad-818b-4c88-aac7-a9b40576f6bd"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""UseSkill4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1072,6 +1112,8 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         m_GamePlay_Right = m_GamePlay.FindAction("Right", throwIfNotFound: true);
         m_GamePlay_GetDiamond = m_GamePlay.FindAction("GetDiamond", throwIfNotFound: true);
         m_GamePlay_UseSkill2 = m_GamePlay.FindAction("UseSkill2", throwIfNotFound: true);
+        m_GamePlay_UseSkill3 = m_GamePlay.FindAction("UseSkill3", throwIfNotFound: true);
+        m_GamePlay_UseSkill4 = m_GamePlay.FindAction("UseSkill4", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1165,6 +1207,8 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_Right;
     private readonly InputAction m_GamePlay_GetDiamond;
     private readonly InputAction m_GamePlay_UseSkill2;
+    private readonly InputAction m_GamePlay_UseSkill3;
+    private readonly InputAction m_GamePlay_UseSkill4;
     public struct GamePlayActions
     {
         private @PlayerInputControl m_Wrapper;
@@ -1183,6 +1227,8 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         public InputAction @Right => m_Wrapper.m_GamePlay_Right;
         public InputAction @GetDiamond => m_Wrapper.m_GamePlay_GetDiamond;
         public InputAction @UseSkill2 => m_Wrapper.m_GamePlay_UseSkill2;
+        public InputAction @UseSkill3 => m_Wrapper.m_GamePlay_UseSkill3;
+        public InputAction @UseSkill4 => m_Wrapper.m_GamePlay_UseSkill4;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1234,6 +1280,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @UseSkill2.started += instance.OnUseSkill2;
             @UseSkill2.performed += instance.OnUseSkill2;
             @UseSkill2.canceled += instance.OnUseSkill2;
+            @UseSkill3.started += instance.OnUseSkill3;
+            @UseSkill3.performed += instance.OnUseSkill3;
+            @UseSkill3.canceled += instance.OnUseSkill3;
+            @UseSkill4.started += instance.OnUseSkill4;
+            @UseSkill4.performed += instance.OnUseSkill4;
+            @UseSkill4.canceled += instance.OnUseSkill4;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -1280,6 +1332,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @UseSkill2.started -= instance.OnUseSkill2;
             @UseSkill2.performed -= instance.OnUseSkill2;
             @UseSkill2.canceled -= instance.OnUseSkill2;
+            @UseSkill3.started -= instance.OnUseSkill3;
+            @UseSkill3.performed -= instance.OnUseSkill3;
+            @UseSkill3.canceled -= instance.OnUseSkill3;
+            @UseSkill4.started -= instance.OnUseSkill4;
+            @UseSkill4.performed -= instance.OnUseSkill4;
+            @UseSkill4.canceled -= instance.OnUseSkill4;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -1476,6 +1534,8 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         void OnRight(InputAction.CallbackContext context);
         void OnGetDiamond(InputAction.CallbackContext context);
         void OnUseSkill2(InputAction.CallbackContext context);
+        void OnUseSkill3(InputAction.CallbackContext context);
+        void OnUseSkill4(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
