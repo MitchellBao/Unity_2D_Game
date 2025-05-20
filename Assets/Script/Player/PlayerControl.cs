@@ -30,6 +30,20 @@ public class PlayerControl : MonoBehaviour
 
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
+
+    public void OnSpawned(string targetLayerName)
+    {
+        // 设置玩家层级
+        int layer = LayerMask.NameToLayer(targetLayerName);
+        if (layer != -1)
+        {
+            gameObject.layer = layer;
+        }
+
+        // 其他初始化逻辑...
+        Debug.Log($"玩家初始化完成，层级设置为: {targetLayerName}");
+    }
+
     void Start()
     {
         // 自动获取所有子对象中的技能
@@ -432,11 +446,7 @@ public class PlayerControl : MonoBehaviour
             HandleSkillTargeting();
             return;
         }
-        // 添加技能快捷键 (示例：数字键1-4)
-        //if (inputControl.GamePlay.UseSkill2.triggered || Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    TryUseSkill(1); // 假设技能列表第二个是时间冻结
-        //}
+        
 
         // 攻击检测（独立冷却）
         if (Input.GetKeyDown(KeyCode.Space) && Point > 0)

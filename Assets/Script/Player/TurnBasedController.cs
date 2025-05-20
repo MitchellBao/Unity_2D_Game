@@ -11,13 +11,58 @@ public class TurnBasedController : MonoBehaviour
     public int maxRounds = 10;     // 最大回合数
     private int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
-    
+    public LayerMask playerLayer; // 在Inspector中设置需要检测的层级
+    void Start()
+    {
+        PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
+        spawner.SpawnSelectedPlayers(1, 3); // 选择角色
+    }
+    //private void Awake()
+    //{
+    //    inputControl = new PlayerInputControl();
+    //    players = FindObjectsOfType<PlayerControl>(); // 获取所有角色
+    //}
+
+    public void InitializePlayers(PlayerControl[] newPlayers)
+    {
+        players = newPlayers;
+        currentPlayerIndex = 0;
+        currentRound = 1;
+
+        // 初始化第一个玩家
+        if (players.Length > 0)
+        {
+            players[0].OnRoundStart();
+            UpdateControlState();
+
+            // 调试颜色
+        }
+    }
+
     private void Awake()
     {
         inputControl = new PlayerInputControl();
-        players = FindObjectsOfType<PlayerControl>(); // 获取所有角色
-    }
 
+        // 直接获取"Player"层的掩码（也可以在Inspector设置）
+        int targetLayerMask = LayerMask.GetMask("player");
+
+        // 或者使用你在Inspector设置的playerLayer（确保设置正确）
+        // int targetLayerMask = playerLayer.value;
+
+        PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
+        List<PlayerControl> validPlayers = new List<PlayerControl>();
+
+        foreach (var player in allPlayers)
+        {
+            // 检查对象层级是否在目标层级掩码中
+            if ((targetLayerMask & (1 << player.gameObject.layer)) != 0)
+            {
+                validPlayers.Add(player);
+            }
+        }
+
+        players = validPlayers.ToArray();
+    }
     private void OnEnable()
     {
         inputControl.Enable();
