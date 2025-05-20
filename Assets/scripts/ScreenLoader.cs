@@ -28,7 +28,7 @@ public class ScreenLoader : MonoBehaviour
 
     private void LoadSceneA()
     {
-        StartCoroutine(LoadScene(3));
+        StartCoroutine(LoadScene(1));
     }
     IEnumerator LoadScene(int index)
     {

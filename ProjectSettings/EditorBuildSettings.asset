@@ -9,13 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/StartGame.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/MapA.unity
-    guid: 9c9db9f013dc1c143b51e03df54c61fe
-  - enabled: 1
-    path: Assets/Scenes/MapB.unity
-    guid: 3a2dab237802db44590484dfa06cb435
-  - enabled: 1
     path: Assets/Scenes/map1.unity
     guid: b2a4b43b744621640a991b3f8abdd245
+  - enabled: 1
+    path: Assets/Scenes/map2.unity
+    guid: 3a2dab237802db44590484dfa06cb435
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 872790e873ca1aa4393c54389b7adb59, type: 2}
