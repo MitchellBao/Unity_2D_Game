@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
+    public bool duringSkill = false;
     [Header("玩家索引设置")]
     public int playerIndex = 0; // 0=玩家1, 1=玩家2
     public PlayerInputControl inputControl;//输入控制

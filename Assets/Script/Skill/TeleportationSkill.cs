@@ -12,7 +12,7 @@ public class TeleportationSkill : SkillBase
     private Vector2 skillDirection;
     private bool isSelectingDirection = false;
     private Vector2 selectedDirection = Vector2.zero;
-
+    
     protected override void ExecuteSkill()
     {
         // 进入方向选择模式
@@ -21,6 +21,7 @@ public class TeleportationSkill : SkillBase
 
     void EnterDirectionSelectionMode()
     {
+        owner.duringSkill=true;
         isSelectingDirection = true;
         selectedDirection = Vector2.zero;
         owner.EnterSkillTargetingMode(this);
@@ -66,6 +67,7 @@ public class TeleportationSkill : SkillBase
         {
             Vector2 targetPos = CalculateTeleportPosition(selectedDirection);
             PerformTeleport(targetPos);
+            owner.duringSkill = false;
             ExitDirectionSelectionMode();
         }
     }
