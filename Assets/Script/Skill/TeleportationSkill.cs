@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditorInternal.VersionControl.ListControl;
 
-public class ThiefSkill :SkillBase
+public class TeleportationSkill : SkillBase
 {
-    [Header("潜行技能设置")]
-    public float teleportDistance = 2f;  // 瞬移距离（以网格为单位）
+    [Header("瞬移技能设置")]
+    public float teleportDistance = 3f;  // 瞬移距离（以网格为单位）
     public LayerMask collisionLayer;     // 碰撞检测层
     private Vector2 skillDirection;
     private bool isSelectingDirection = false;

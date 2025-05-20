@@ -107,9 +107,6 @@ public class PlayerControl : MonoBehaviour
     public GameObject blueGemPrefab;
     public GameObject greenGemPrefab;
     public GameObject poisonousGemPrefab;
-    [Header("持有宝石颜色设置")]
-    public Color hasGemColor = Color.magenta; // 持有宝石时的颜色
-    public Color noGemColor = Color.white;   // 无宝石时的默认颜色
 
     private SpriteRenderer spriteRenderer;
 
