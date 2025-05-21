@@ -118,7 +118,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PowerFrame
+      name: TurnFrame
       rect:
         serializedVersion: 2
         x: 307
@@ -1798,7 +1798,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PowerYellow
+      name: TurnYellow
       rect:
         serializedVersion: 2
         x: 308
@@ -1848,7 +1848,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1948,13 +1948,13 @@ TextureImporter:
       HealthFrame: 393055046
       HealthGreen: 319807663
       HealthRed: 1196071375
-      PowerFrame: 284195721
-      PowerYellow: 759814357
       S: 572840589
       SkillBlue: 1158298587
       SkillFram: -1072438122
       SkillFrame: -1300619402
       SkillYellow: 101310758
+      TurnFrame: 284195721
+      TurnYellow: 759814357
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

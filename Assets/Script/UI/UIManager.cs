@@ -9,9 +9,12 @@ public class UIManager : MonoBehaviour
 
     public PlayerStatusBar playerStatusBar01;
     public PlayerStatusBar playerStatusBar02;
+    public TurnStatusBar turnStatusBar;
+    
    
     [Header("Events Listening")]
     public CharacterEventSO characterEventSO;
+    public TurnEventSO turnEventSO;
 
     private void OnEnable()
     {
@@ -19,8 +22,10 @@ public class UIManager : MonoBehaviour
         characterEventSO.OnDiamondStatusEventRaised += OnDiamondStatusChange;
         characterEventSO.OnFrozenStatusEventRaised += OnFrozenStatusChange;
         characterEventSO.OnSkillEventRaised += OnSkillUseChange;
-
+        turnEventSO.OnTurnEventRaised += OnTurnChange;
+        turnEventSO.OnTurnEventRaised += OnPointChange;
     }
+
 
     private void OnDisable()
     {
@@ -28,7 +33,8 @@ public class UIManager : MonoBehaviour
         characterEventSO.OnDiamondStatusEventRaised -= OnDiamondStatusChange;
         characterEventSO.OnFrozenStatusEventRaised -= OnFrozenStatusChange;
         characterEventSO.OnSkillEventRaised -= OnSkillUseChange;
-
+        turnEventSO.OnTurnEventRaised -= OnTurnChange;
+        turnEventSO.OnTurnEventRaised -= OnPointChange;
     }
 
     private void OnActionPointChange(PlayerControl character)
@@ -86,4 +92,19 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+    private void OnTurnChange(TurnBasedController turner)
+    {
+        var percentage = (float)turner.currentRound / turner.maxRounds;
+        turnStatusBar.OnTurnChange(percentage);
+    }
+
+    private void OnPointChange(TurnBasedController turner)
+    {
+        int p1 = turner.p1.Point;
+        int p2 = turner.p2.Point;
+        turnStatusBar.OnPointChange(p1, p2);
+    }
+
 }
+

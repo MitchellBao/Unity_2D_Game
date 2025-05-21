@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TurnBasedController : MonoBehaviour
 {
@@ -9,13 +10,19 @@ public class TurnBasedController : MonoBehaviour
     public PlayerControl[] players;        // 两个角色的控制脚本
     private int currentPlayerIndex = 0;    // 当前控制的角色索引
     public int maxRounds = 100;     // 最大回合数
-    private int currentRound = 0;   // 当前回合数
+    public int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
     public LayerMask playerLayer; // 在Inspector中设置需要检测的层级
+
+    [Header("Events")]
+    public UnityEvent<TurnBasedController> OnTurnChange;
+    public UnityEvent<TurnBasedController> OnPointChange;
+
     void Start()
     {
         PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
         spawner.SpawnSelectedPlayers(1, 3); // 选择角色
+        OnPointChange?.Invoke(this);
     }
     public void InitializePlayers(PlayerControl[] newPlayers)
     {
@@ -71,6 +78,7 @@ public class TurnBasedController : MonoBehaviour
         {
             SwitchCharacter();
         }
+        OnPointChange?.Invoke(this);
     }
     private void OnDisable()
     {
@@ -108,6 +116,7 @@ public class TurnBasedController : MonoBehaviour
         nextPlayer.OnRoundStart();
         UpdateControlState();
         Debug.Log($"切换到角色: {currentPlayerIndex + 1}");
+        OnTurnChange?.Invoke(this);
     }
     
     // 更新角色输入状态
