@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 
 public class PlayerControl : MonoBehaviour
@@ -18,7 +20,7 @@ public class PlayerControl : MonoBehaviour
     public LayerMask playerLayer;//玩家层级
     public LayerMask gemLayer;//宝石层级
     [Header("持有宝石状态设置")]
-    public bool isGetDiamond;
+    public bool isGetDiamond = false;
     public DiamondKinds diamondKind;//持有宝石类别
 
     private bool isMoving = false; // 是否正在移动
@@ -30,6 +32,11 @@ public class PlayerControl : MonoBehaviour
 
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
+
+    public UnityEvent<PlayerControl> OnActionPointChange;
+    public UnityEvent<PlayerControl> OnSkillChange;
+    public UnityEvent<PlayerControl> OnDiamondStatusChange;
+    public UnityEvent<PlayerControl> OnFrozenStatusChange;
 
     void Start()
     {
@@ -117,6 +124,10 @@ public class PlayerControl : MonoBehaviour
 
         rb.position = targetPosition;
         isMoving = false;
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
+        }
     }
 
 
@@ -152,6 +163,11 @@ public class PlayerControl : MonoBehaviour
                     }
                 }
             }
+        }
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
+            OnDiamondStatusChange?.Invoke(this);
         }
     }
 
@@ -232,6 +248,8 @@ public class PlayerControl : MonoBehaviour
         }
         Debug.Log("没有满足任何击落条件");
         return false;
+
+
     }
     private bool IsStraightLine(Vector2 pos1, Vector2 pos2)
     {
@@ -360,6 +378,10 @@ public class PlayerControl : MonoBehaviour
     public void LoseGem()
     {
         isGetDiamond = false;
+        if (playerIndex == 5)
+        {
+            OnDiamondStatusChange?.Invoke(this);
+        }
     }
     void AttackObstacle()//摧毁箱子
     {
@@ -379,6 +401,10 @@ public class PlayerControl : MonoBehaviour
                 obstacle.TakeDamage();
                 Point--; // 消耗行动点
             }
+        }
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
         }
     }
 
@@ -406,6 +432,11 @@ public class PlayerControl : MonoBehaviour
             inputControl.Disable(); // 关键！禁用非活跃玩家的输入
         }
         lastSwitchTime = Time.time;// 记录激活时间
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
+            OnFrozenStatusChange?.Invoke(this);
+        }
     }
 
     private void Update()
@@ -470,6 +501,11 @@ public class PlayerControl : MonoBehaviour
             }
 
         }
+        if (playerIndex == 5)
+        {
+            OnDiamondStatusChange?.Invoke(this);
+            OnFrozenStatusChange?.Invoke(this);
+        }
     }
 
     
@@ -509,6 +545,10 @@ public class PlayerControl : MonoBehaviour
                 Instantiate(blockPrefab, placePos, Quaternion.identity);
                 Point-=2;
             }
+        }
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
         }
     }
 
@@ -590,6 +630,10 @@ public class PlayerControl : MonoBehaviour
     {
         Point = Mathf.Max(0, Point - amount);
         // 可以在这里添加UI更新
+        if (playerIndex == 5)
+        {
+            OnActionPointChange?.Invoke(this);
+        }
     }
     [Header("冻结状态")]
     public bool isFrozen = false;
