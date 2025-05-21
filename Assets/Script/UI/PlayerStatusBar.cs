@@ -21,7 +21,7 @@ public class PlayerStatusBar : MonoBehaviour
     {
         if (actionPointDelayImage.fillAmount > actionPointImage.fillAmount)
         {
-            actionPointDelayImage.fillAmount -= Time.deltaTime * 2;
+            actionPointDelayImage.fillAmount -= Time.deltaTime ;
         }
         else
         {
@@ -70,9 +70,9 @@ public class PlayerStatusBar : MonoBehaviour
     }
 
     // Update Skill Status
-    public void OnSkillUseChange(bool duringSkill)
+    public void OnSkillUseChange(bool isSkillUsable)
     {
-        skillImage.fillAmount = duringSkill ? 1f : 0f; // 技能使用中填充
+        skillImage.fillAmount = isSkillUsable ? 1f : 0f; // 技能使用中填充
     }
 
 }

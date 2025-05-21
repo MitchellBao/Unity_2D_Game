@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.InputManagerEntry;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,42 +15,75 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        characterEventSO.OnActionPointEventRaised += OnActionPointChange01;
+        characterEventSO.OnActionPointEventRaised += OnActionPointChange;
         characterEventSO.OnDiamondStatusEventRaised += OnDiamondStatusChange;
         characterEventSO.OnFrozenStatusEventRaised += OnFrozenStatusChange;
         characterEventSO.OnSkillEventRaised += OnSkillUseChange;
+
     }
 
     private void OnDisable()
     {
-        characterEventSO.OnActionPointEventRaised -= OnActionPointChange01;
+        characterEventSO.OnActionPointEventRaised -= OnActionPointChange;
         characterEventSO.OnDiamondStatusEventRaised -= OnDiamondStatusChange;
         characterEventSO.OnFrozenStatusEventRaised -= OnFrozenStatusChange;
         characterEventSO.OnSkillEventRaised -= OnSkillUseChange;
+
     }
 
-    private void OnActionPointChange01(PlayerControl character)
+    private void OnActionPointChange(PlayerControl character)
     {
         var percentage = (float)character.Point / 6;
-        playerStatusBar01.OnActionPointChange(percentage);
+        if (character.playerIndex == 5)
+        {
+            playerStatusBar01.OnActionPointChange(percentage);
+        }
+        else if (character.playerIndex == 6)
+        {
+            playerStatusBar02.OnActionPointChange(percentage);
+        }
     }
 
     void OnDiamondStatusChange(PlayerControl character)
     {
         bool hasDiamond = character.isGetDiamond;
         DiamondKinds kind = character.diamondKind;
-        playerStatusBar01.OnDiamondStatusChange(hasDiamond, kind);
+        if (character.playerIndex == 5)
+        {
+            playerStatusBar01.OnDiamondStatusChange(hasDiamond, kind);
+        }
+        else if (character.playerIndex == 6)
+        {
+            playerStatusBar02.OnDiamondStatusChange(hasDiamond, kind);
+        }
+        
     }
 
     void OnFrozenStatusChange(PlayerControl character)
     {
         bool isFrozen = character.isFrozen;
-        playerStatusBar01.OnFrozenStatusChange(isFrozen);
+        if (character.playerIndex == 5)
+        {
+            playerStatusBar01.OnFrozenStatusChange(isFrozen);
+        }
+        else if (character.playerIndex == 6)
+        {
+            playerStatusBar02.OnFrozenStatusChange(isFrozen);
+        }
+        
     }
 
     void OnSkillUseChange(PlayerControl character)
     {
-        
-        
+        bool isSkillUsable = character.isSkillUsable;
+        if (character.playerIndex == 5)
+        {
+            playerStatusBar01.OnSkillUseChange(isSkillUsable);
+        }
+        else if (character.playerIndex == 6)
+        {
+            playerStatusBar02.OnSkillUseChange(isSkillUsable);
+        }
+
     }
 }

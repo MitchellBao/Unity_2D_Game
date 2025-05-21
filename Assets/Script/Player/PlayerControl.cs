@@ -33,10 +33,20 @@ public class PlayerControl : MonoBehaviour
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
 
+    [Header("Events")]
     public UnityEvent<PlayerControl> OnActionPointChange;
     public UnityEvent<PlayerControl> OnSkillChange;
     public UnityEvent<PlayerControl> OnDiamondStatusChange;
     public UnityEvent<PlayerControl> OnFrozenStatusChange;
+
+    [Header("技能系统")]
+    public List<SkillBase> skills = new List<SkillBase>(); // 技能列表
+    private SkillBase currentActiveSkill; // 当前激活的技能(用于目标选择模式)
+    private bool isInSkillTargetingMode = false; // 是否处于技能目标选择模式
+    private bool movementEnabled = true;//技能释放是否允许移动
+    public bool isSkillUsable = false;
+
+
 
     void Start()
     {
@@ -47,6 +57,13 @@ public class PlayerControl : MonoBehaviour
         {
             skill.Initialize(this);
         }
+
+        isSkillUsable = (skills.Count > 0) && skills[0].CanUse();
+
+        OnActionPointChange?.Invoke(this);
+        OnDiamondStatusChange?.Invoke(this);
+        OnFrozenStatusChange?.Invoke(this);
+        OnSkillChange?.Invoke(this);
     }
     private void Awake()
     {
@@ -124,10 +141,9 @@ public class PlayerControl : MonoBehaviour
 
         rb.position = targetPosition;
         isMoving = false;
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-        }
+
+         OnActionPointChange?.Invoke(this);
+
     }
 
 
@@ -164,11 +180,10 @@ public class PlayerControl : MonoBehaviour
                 }
             }
         }
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-            OnDiamondStatusChange?.Invoke(this);
-        }
+
+        OnActionPointChange?.Invoke(this);
+        OnDiamondStatusChange?.Invoke(this);
+
     }
 
   
@@ -378,10 +393,9 @@ public class PlayerControl : MonoBehaviour
     public void LoseGem()
     {
         isGetDiamond = false;
-        if (playerIndex == 5)
-        {
-            OnDiamondStatusChange?.Invoke(this);
-        }
+
+        OnDiamondStatusChange?.Invoke(this);
+
     }
     void AttackObstacle()//摧毁箱子
     {
@@ -402,10 +416,9 @@ public class PlayerControl : MonoBehaviour
                 Point--; // 消耗行动点
             }
         }
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-        }
+
+        OnActionPointChange?.Invoke(this);
+
     }
 
     private bool isActive = false;
@@ -432,16 +445,17 @@ public class PlayerControl : MonoBehaviour
             inputControl.Disable(); // 关键！禁用非活跃玩家的输入
         }
         lastSwitchTime = Time.time;// 记录激活时间
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-            OnFrozenStatusChange?.Invoke(this);
-        }
+
+        OnActionPointChange?.Invoke(this);
+        OnFrozenStatusChange?.Invoke(this);
+
     }
 
     private void Update()
     {
-        
+
+        // Skills Usability Check
+        isSkillUsable = (skills.Count > 0) && skills[0].CanUse();
 
         //没做ui之前的可视化宝石持有
         if (isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.cyan;
@@ -501,11 +515,11 @@ public class PlayerControl : MonoBehaviour
             }
 
         }
-        if (playerIndex == 5)
-        {
-            OnDiamondStatusChange?.Invoke(this);
-            OnFrozenStatusChange?.Invoke(this);
-        }
+
+        OnDiamondStatusChange?.Invoke(this);
+        OnFrozenStatusChange?.Invoke(this);
+        OnSkillChange?.Invoke(this);
+
     }
 
     
@@ -546,17 +560,10 @@ public class PlayerControl : MonoBehaviour
                 Point-=2;
             }
         }
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-        }
+
+        OnActionPointChange?.Invoke(this);
     }
 
-    [Header("技能系统")]
-    public List<SkillBase> skills = new List<SkillBase>(); // 技能列表
-    private SkillBase currentActiveSkill; // 当前激活的技能(用于目标选择模式)
-    private bool isInSkillTargetingMode = false; // 是否处于技能目标选择模式
-    private bool movementEnabled = true;//技能释放是否允许移动
     //技能初始化
     void InitializeSkills()
     {
@@ -621,6 +628,9 @@ public class PlayerControl : MonoBehaviour
         {
             skill.UpdateCooldown();
         }
+        isSkillUsable = (skills.Count > 0) && skills[0].CanUse();
+
+        OnSkillChange?.Invoke(this);
 
         // 更新UI
         //UIManager.Instance.UpdateActionPoints(currentActionPoints);
@@ -630,10 +640,9 @@ public class PlayerControl : MonoBehaviour
     {
         Point = Mathf.Max(0, Point - amount);
         // 可以在这里添加UI更新
-        if (playerIndex == 5)
-        {
-            OnActionPointChange?.Invoke(this);
-        }
+
+        OnActionPointChange?.Invoke(this);
+
     }
     [Header("冻结状态")]
     public bool isFrozen = false;
