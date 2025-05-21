@@ -69,15 +69,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UseSkill1",
-                    "type": "Button",
-                    "id": "282845f5-3aab-456a-a2b1-045682d6303e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Up",
                     "type": "Button",
                     "id": "e59a75b9-c843-4179-9cbe-93e0c63bc700",
@@ -117,6 +108,15 @@
                     "name": "GetDiamond",
                     "type": "Button",
                     "id": "dc102e45-545b-4c07-9b43-1a845f3f82a0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UseSkill1",
+                    "type": "Button",
+                    "id": "282845f5-3aab-456a-a2b1-045682d6303e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -454,7 +454,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "GetDiamond",
                     "isComposite": false,
                     "isPartOfComposite": false

@@ -9,7 +9,7 @@ public class PlayerControl : MonoBehaviour
 {
     public bool duringSkill = false;
     [Header("玩家索引设置")]
-    public int playerIndex = 0; // 0=玩家1, 1=玩家2
+    public int playerIndex = -1; // -10=玩家1, 1=玩家2
     public PlayerInputControl inputControl;//输入控制
     public float gridSize = 1f;// 每格的大小
     public int Point = 100; // 行动点
@@ -58,15 +58,21 @@ public class PlayerControl : MonoBehaviour
         // 新增鼠标点击监听
         inputControl.GamePlay.MouseClick.performed += OnMouseClick;
         //技能监听
-        if (playerIndex == 0) // 玩家1
+        if (playerIndex == 1) // 玩家1
         {
             inputControl.GamePlay.UseSkill1.performed += _ => TryUseSkill(0);
-            inputControl.GamePlay.UseSkill3.performed += _ => TryUseSkill(1);
         }
-        else if (playerIndex == 1) // 玩家2
+        if (playerIndex == 2) // 玩家2
         {
             inputControl.GamePlay.UseSkill2.performed += _ => TryUseSkill(0);
-            inputControl.GamePlay.UseSkill4.performed += _ => TryUseSkill(1);
+        }
+        if (playerIndex == 3) // 玩家3
+        {
+            inputControl.GamePlay.UseSkill3.performed += _ => TryUseSkill(0);
+        }
+        else if (playerIndex == 4) // 玩家4
+        {
+            inputControl.GamePlay.UseSkill4.performed += _ => TryUseSkill(0);
         }
         //偷宝石检测
         inputControl.GamePlay.GetDiamond.performed += _ => TryKnockdown();

@@ -93,7 +93,7 @@ public class PlayerSpawner : MonoBehaviour
 
         // 设置层级
         SetLayerRecursively(newPlayer, playerLayerName);
-
+        newPlayer.GetComponent<PlayerControl>().playerIndex= spawnIndex+5;
         Debug.Log($"生成角色ID {characterID} 在位置 {spawnIndex}");
     }
 

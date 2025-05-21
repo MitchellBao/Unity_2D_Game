@@ -8,7 +8,7 @@ public class TurnBasedController : MonoBehaviour
     public PlayerInputControl inputControl; // 你的输入系统
     public PlayerControl[] players;        // 两个角色的控制脚本
     private int currentPlayerIndex = 0;    // 当前控制的角色索引
-    public int maxRounds = 50;     // 最大回合数
+    public int maxRounds = 100;     // 最大回合数
     private int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
     public LayerMask playerLayer; // 在Inspector中设置需要检测的层级

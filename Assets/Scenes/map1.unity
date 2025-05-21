@@ -346,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 246348263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.5, y: -5.5, z: 0}
+  m_LocalPosition: {x: -0.5, y: 2.5, z: 0}
   m_LocalScale: {x: 1.0189, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13472,7 +13472,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.142252
+  orthographic size: 12.0398035
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -13792,7 +13792,7 @@ MonoBehaviour:
   - {fileID: 1385200735}
   - {fileID: 1084385419}
   - {fileID: 1674766595}
-  maxRounds: 10
+  maxRounds: 50
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -14702,7 +14702,7 @@ Transform:
   m_GameObject: {fileID: 1075434193}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.5, y: 9.5, z: 0}
+  m_LocalPosition: {x: -2.5, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14775,7 +14775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duringSkill: 0
-  playerIndex: 0
+  playerIndex: 3
   gridSize: 1
   Point: 0
   obstacleLayer:
@@ -14783,7 +14783,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 4224
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15399,7 +15399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duringSkill: 0
-  playerIndex: 0
+  playerIndex: 1
   gridSize: 1
   Point: 0
   obstacleLayer:
@@ -15407,7 +15407,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 4224
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15478,7 +15478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duringSkill: 0
-  playerIndex: 1
+  playerIndex: 2
   gridSize: 1
   Point: 0
   obstacleLayer:
@@ -15486,7 +15486,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 4224
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15868,7 +15868,7 @@ Transform:
   m_GameObject: {fileID: 1417708449}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.5, y: -5.5, z: 0}
+  m_LocalPosition: {x: 1.5, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24813,7 +24813,7 @@ Transform:
   m_GameObject: {fileID: 1674766593}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.02, y: -5.08, z: 0}
+  m_LocalPosition: {x: -22.82, y: -5.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24833,7 +24833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duringSkill: 0
-  playerIndex: 1
+  playerIndex: 4
   gridSize: 1
   Point: 0
   obstacleLayer:
@@ -24841,7 +24841,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 4224
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024

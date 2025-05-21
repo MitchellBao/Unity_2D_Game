@@ -91,15 +91,6 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""UseSkill1"",
-                    ""type"": ""Button"",
-                    ""id"": ""282845f5-3aab-456a-a2b1-045682d6303e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Up"",
                     ""type"": ""Button"",
                     ""id"": ""e59a75b9-c843-4179-9cbe-93e0c63bc700"",
@@ -139,6 +130,15 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""name"": ""GetDiamond"",
                     ""type"": ""Button"",
                     ""id"": ""dc102e45-545b-4c07-9b43-1a845f3f82a0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSkill1"",
+                    ""type"": ""Button"",
+                    ""id"": ""282845f5-3aab-456a-a2b1-045682d6303e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -476,7 +476,7 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""GetDiamond"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1105,12 +1105,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         m_GamePlay_MouseClick = m_GamePlay.FindAction("MouseClick", throwIfNotFound: true);
         m_GamePlay_MousePosition = m_GamePlay.FindAction("MousePosition", throwIfNotFound: true);
         m_GamePlay_FinishRound = m_GamePlay.FindAction("FinishRound", throwIfNotFound: true);
-        m_GamePlay_UseSkill1 = m_GamePlay.FindAction("UseSkill1", throwIfNotFound: true);
         m_GamePlay_Up = m_GamePlay.FindAction("Up", throwIfNotFound: true);
         m_GamePlay_Down = m_GamePlay.FindAction("Down", throwIfNotFound: true);
         m_GamePlay_Left = m_GamePlay.FindAction("Left", throwIfNotFound: true);
         m_GamePlay_Right = m_GamePlay.FindAction("Right", throwIfNotFound: true);
         m_GamePlay_GetDiamond = m_GamePlay.FindAction("GetDiamond", throwIfNotFound: true);
+        m_GamePlay_UseSkill1 = m_GamePlay.FindAction("UseSkill1", throwIfNotFound: true);
         m_GamePlay_UseSkill2 = m_GamePlay.FindAction("UseSkill2", throwIfNotFound: true);
         m_GamePlay_UseSkill3 = m_GamePlay.FindAction("UseSkill3", throwIfNotFound: true);
         m_GamePlay_UseSkill4 = m_GamePlay.FindAction("UseSkill4", throwIfNotFound: true);
@@ -1200,12 +1200,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_MouseClick;
     private readonly InputAction m_GamePlay_MousePosition;
     private readonly InputAction m_GamePlay_FinishRound;
-    private readonly InputAction m_GamePlay_UseSkill1;
     private readonly InputAction m_GamePlay_Up;
     private readonly InputAction m_GamePlay_Down;
     private readonly InputAction m_GamePlay_Left;
     private readonly InputAction m_GamePlay_Right;
     private readonly InputAction m_GamePlay_GetDiamond;
+    private readonly InputAction m_GamePlay_UseSkill1;
     private readonly InputAction m_GamePlay_UseSkill2;
     private readonly InputAction m_GamePlay_UseSkill3;
     private readonly InputAction m_GamePlay_UseSkill4;
@@ -1220,12 +1220,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         public InputAction @MouseClick => m_Wrapper.m_GamePlay_MouseClick;
         public InputAction @MousePosition => m_Wrapper.m_GamePlay_MousePosition;
         public InputAction @FinishRound => m_Wrapper.m_GamePlay_FinishRound;
-        public InputAction @UseSkill1 => m_Wrapper.m_GamePlay_UseSkill1;
         public InputAction @Up => m_Wrapper.m_GamePlay_Up;
         public InputAction @Down => m_Wrapper.m_GamePlay_Down;
         public InputAction @Left => m_Wrapper.m_GamePlay_Left;
         public InputAction @Right => m_Wrapper.m_GamePlay_Right;
         public InputAction @GetDiamond => m_Wrapper.m_GamePlay_GetDiamond;
+        public InputAction @UseSkill1 => m_Wrapper.m_GamePlay_UseSkill1;
         public InputAction @UseSkill2 => m_Wrapper.m_GamePlay_UseSkill2;
         public InputAction @UseSkill3 => m_Wrapper.m_GamePlay_UseSkill3;
         public InputAction @UseSkill4 => m_Wrapper.m_GamePlay_UseSkill4;
@@ -1259,9 +1259,6 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @FinishRound.started += instance.OnFinishRound;
             @FinishRound.performed += instance.OnFinishRound;
             @FinishRound.canceled += instance.OnFinishRound;
-            @UseSkill1.started += instance.OnUseSkill1;
-            @UseSkill1.performed += instance.OnUseSkill1;
-            @UseSkill1.canceled += instance.OnUseSkill1;
             @Up.started += instance.OnUp;
             @Up.performed += instance.OnUp;
             @Up.canceled += instance.OnUp;
@@ -1277,6 +1274,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @GetDiamond.started += instance.OnGetDiamond;
             @GetDiamond.performed += instance.OnGetDiamond;
             @GetDiamond.canceled += instance.OnGetDiamond;
+            @UseSkill1.started += instance.OnUseSkill1;
+            @UseSkill1.performed += instance.OnUseSkill1;
+            @UseSkill1.canceled += instance.OnUseSkill1;
             @UseSkill2.started += instance.OnUseSkill2;
             @UseSkill2.performed += instance.OnUseSkill2;
             @UseSkill2.canceled += instance.OnUseSkill2;
@@ -1311,9 +1311,6 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @FinishRound.started -= instance.OnFinishRound;
             @FinishRound.performed -= instance.OnFinishRound;
             @FinishRound.canceled -= instance.OnFinishRound;
-            @UseSkill1.started -= instance.OnUseSkill1;
-            @UseSkill1.performed -= instance.OnUseSkill1;
-            @UseSkill1.canceled -= instance.OnUseSkill1;
             @Up.started -= instance.OnUp;
             @Up.performed -= instance.OnUp;
             @Up.canceled -= instance.OnUp;
@@ -1329,6 +1326,9 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
             @GetDiamond.started -= instance.OnGetDiamond;
             @GetDiamond.performed -= instance.OnGetDiamond;
             @GetDiamond.canceled -= instance.OnGetDiamond;
+            @UseSkill1.started -= instance.OnUseSkill1;
+            @UseSkill1.performed -= instance.OnUseSkill1;
+            @UseSkill1.canceled -= instance.OnUseSkill1;
             @UseSkill2.started -= instance.OnUseSkill2;
             @UseSkill2.performed -= instance.OnUseSkill2;
             @UseSkill2.canceled -= instance.OnUseSkill2;
@@ -1527,12 +1527,12 @@ public partial class @PlayerInputControl: IInputActionCollection2, IDisposable
         void OnMouseClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnFinishRound(InputAction.CallbackContext context);
-        void OnUseSkill1(InputAction.CallbackContext context);
         void OnUp(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
         void OnGetDiamond(InputAction.CallbackContext context);
+        void OnUseSkill1(InputAction.CallbackContext context);
         void OnUseSkill2(InputAction.CallbackContext context);
         void OnUseSkill3(InputAction.CallbackContext context);
         void OnUseSkill4(InputAction.CallbackContext context);
