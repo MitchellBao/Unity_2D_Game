@@ -92,14 +92,7 @@ public class PlayerSpawner : MonoBehaviour
             spawnPoints[spawnIndex].rotation);
 
         // 设置层级
-        SetLayerRecursively(newPlayer, baseLayerName);
-
-        // 激活玩家控制脚本时再设置为Player层级
-        PlayerControl playerControl = newPlayer.GetComponent<PlayerControl>();
-        if (playerControl != null)
-        {
-            playerControl.OnSpawned(playerLayerName);
-        }
+        SetLayerRecursively(newPlayer, playerLayerName);
 
         Debug.Log($"生成角色ID {characterID} 在位置 {spawnIndex}");
     }

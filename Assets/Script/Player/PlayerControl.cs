@@ -31,19 +31,6 @@ public class PlayerControl : MonoBehaviour
     private Vector2 _lastMoveDirection = Vector2.right; // 默认朝右
     public Vector2 LastMoveDirection => _lastMoveDirection; // 公开只读属性
 
-    public void OnSpawned(string targetLayerName)
-    {
-        // 设置玩家层级
-        int layer = LayerMask.NameToLayer(targetLayerName);
-        if (layer != -1)
-        {
-            gameObject.layer = layer;
-        }
-
-        // 其他初始化逻辑...
-        Debug.Log($"玩家初始化完成，层级设置为: {targetLayerName}");
-    }
-
     void Start()
     {
         // 自动获取所有子对象中的技能

@@ -14738,7 +14738,7 @@ Transform:
   m_GameObject: {fileID: 1084385415}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.72, y: -1.93, z: 0}
+  m_LocalPosition: {x: -22.9, y: -3.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14783,7 +14783,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4096
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15334,7 +15334,7 @@ Transform:
   m_GameObject: {fileID: 1384511830}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.43, y: 3.02, z: 0}
+  m_LocalPosition: {x: -22.85, y: -1.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15407,7 +15407,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4096
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15486,7 +15486,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4096
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -15639,7 +15639,7 @@ Transform:
   m_GameObject: {fileID: 1385200734}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.85, y: 0.91, z: 0}
+  m_LocalPosition: {x: -22.84, y: -2.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24813,7 +24813,7 @@ Transform:
   m_GameObject: {fileID: 1674766593}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.95, y: -3.74, z: 0}
+  m_LocalPosition: {x: -23.02, y: -5.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24841,7 +24841,7 @@ MonoBehaviour:
     m_Bits: 2304
   playerLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4096
   gemLayer:
     serializedVersion: 2
     m_Bits: 1024

@@ -8,7 +8,7 @@ public class TurnBasedController : MonoBehaviour
     public PlayerInputControl inputControl; // 你的输入系统
     public PlayerControl[] players;        // 两个角色的控制脚本
     private int currentPlayerIndex = 0;    // 当前控制的角色索引
-    public int maxRounds = 10;     // 最大回合数
+    public int maxRounds = 50;     // 最大回合数
     private int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
     public LayerMask playerLayer; // 在Inspector中设置需要检测的层级
@@ -17,51 +17,46 @@ public class TurnBasedController : MonoBehaviour
         PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
         spawner.SpawnSelectedPlayers(1, 3); // 选择角色
     }
-    //private void Awake()
-    //{
-    //    inputControl = new PlayerInputControl();
-    //    players = FindObjectsOfType<PlayerControl>(); // 获取所有角色
-    //}
-
     public void InitializePlayers(PlayerControl[] newPlayers)
     {
-        players = newPlayers;
-        currentPlayerIndex = 0;
-        currentRound = 1;
-
-        // 初始化第一个玩家
-        if (players.Length > 0)
-        {
-            players[0].OnRoundStart();
-            UpdateControlState();
-
-            // 调试颜色
-        }
-    }
-
-    private void Awake()
-    {
-        inputControl = new PlayerInputControl();
-
-        // 直接获取"Player"层的掩码（也可以在Inspector设置）
-        int targetLayerMask = LayerMask.GetMask("player");
-
-        // 或者使用你在Inspector设置的playerLayer（确保设置正确）
-        // int targetLayerMask = playerLayer.value;
-
-        PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
         List<PlayerControl> validPlayers = new List<PlayerControl>();
 
-        foreach (var player in allPlayers)
+        foreach (var player in newPlayers)
         {
-            // 检查对象层级是否在目标层级掩码中
-            if ((targetLayerMask & (1 << player.gameObject.layer)) != 0)
+            if (IsInPlayerLayer(player.gameObject))
             {
                 validPlayers.Add(player);
             }
         }
 
         players = validPlayers.ToArray();
+    }
+
+    private void Awake()
+    {
+        inputControl = new PlayerInputControl();
+
+        // 获取所有PlayerControl组件
+        PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
+        List<PlayerControl> filteredPlayers = new List<PlayerControl>();
+
+        foreach (PlayerControl player in allPlayers)
+        {
+            // 检查对象是否在指定层
+            if (IsInPlayerLayer(player.gameObject))
+            {
+                filteredPlayers.Add(player);
+            }
+        }
+
+        players = filteredPlayers.ToArray();
+    }
+
+    // 新增的层检测方法
+    private bool IsInPlayerLayer(GameObject obj)
+    {
+        // 使用位运算检查层掩码
+        return (playerLayer.value & (1 << obj.layer)) != 0;
     }
     private void OnEnable()
     {
