@@ -154,6 +154,7 @@ MonoBehaviour:
   loadEventSO: {fileID: 11400000, guid: 04c18688dc0d8ea4bae19ac1bee58cfc, type: 2}
   map01Event: {fileID: 11400000, guid: ac308a4b62c5a7540b8ce46dea272122, type: 2}
   map02Event: {fileID: 11400000, guid: 87ae9745c944dab4d9cdfb54a486aa11, type: 2}
+  menuEvent: {fileID: 11400000, guid: 42556013ed0648c4e9f67738f6b85f23, type: 2}
   Map01Scene: {fileID: 11400000, guid: d8fa5315f60a96e40881b23abe9e23ab, type: 2}
   Map02Scene: {fileID: 11400000, guid: 40a17a67d40f88948bf1d80305ed1a1c, type: 2}
   menuScene: {fileID: 11400000, guid: 3d40a439eeee12f45a9c7e60da779d09, type: 2}

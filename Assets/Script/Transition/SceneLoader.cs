@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -14,6 +15,7 @@ public class SceneLoader : MonoBehaviour
     public SceneLoadEventSO loadEventSO;
     public VoidEventSO map01Event;
     public VoidEventSO map02Event;
+    public VoidEventSO menuEvent;
 
     [Header("Scene")]
     public GameSceneSO Map01Scene;
@@ -33,10 +35,8 @@ public class SceneLoader : MonoBehaviour
         //currentLoadedScene = menuScene;
         //currentLoadedScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
 
+        //TODO
     }
-
-    //TODO
-
     private void Start()
     {
         Debug.Log("SceneLoader Start: Attempting to load menuScene");
@@ -56,7 +56,11 @@ public class SceneLoader : MonoBehaviour
         loadEventSO.LoadRequestEvent += OnLoadRequestEvent;
         map01Event.OnEventRaised += Map01Game;
         map02Event.OnEventRaised += Map02Game;
+        menuEvent.OnEventRaised += ReturnToMenu;
+
     }
+
+
     private void OnDisable()
     {
         loadEventSO.LoadRequestEvent -= OnLoadRequestEvent;
@@ -96,7 +100,7 @@ public class SceneLoader : MonoBehaviour
         yield return new WaitForSeconds(fadeDuration);
 
 
-            yield return currentLoadedScene.sceneReference.UnLoadScene();
+        yield return currentLoadedScene.sceneReference.UnLoadScene();
         
         LoadNewScene();
     }
@@ -131,5 +135,13 @@ public class SceneLoader : MonoBehaviour
         sceneToLoad = Map02Scene;
         loadEventSO.RaiseLoadRequestEvent(sceneToLoad, true);
     }
+
+    private void ReturnToMenu()
+    {
+        Debug.Log("menu");
+        sceneToLoad = menuScene;
+        loadEventSO.RaiseLoadRequestEvent(sceneToLoad, true);
+    }
+
 }
 

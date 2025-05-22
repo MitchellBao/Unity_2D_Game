@@ -60,6 +60,7 @@ public class PlayerSpawner : MonoBehaviour
         InitializeTurnController();
     }
 
+
     private void SpawnPlayer(int characterID, int spawnIndex)
     {
         // 查找对应的预制体
