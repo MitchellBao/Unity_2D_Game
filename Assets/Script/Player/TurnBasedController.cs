@@ -136,7 +136,7 @@ public class TurnBasedController : MonoBehaviour
 
     private void GameOver()
     {
-        OnGameOver?.Invoke(this);
+        
         if (p1.Point == p2.Point)
             Debug.Log($"游戏结束 平局");
         else
@@ -144,7 +144,8 @@ public class TurnBasedController : MonoBehaviour
             int playerid= p1.Point > p2.Point ? 1: 2;
             Debug.Log($"游戏结束,玩家:{playerid}获胜！ ");
         }
-        
+
+        OnGameOver?.Invoke(this);
         // 停止所有输入
         inputControl.Disable();
 

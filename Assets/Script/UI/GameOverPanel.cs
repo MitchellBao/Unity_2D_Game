@@ -11,6 +11,6 @@ public class GameOverPanel : MonoBehaviour
     public void ShowResult(string message)
     {
         resultText.text = message;
-        gameObject.SetActive(true);
+        
     }
 }
