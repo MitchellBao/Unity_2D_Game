@@ -9,6 +9,8 @@ public class TurnEventSO : ScriptableObject
     // 现有事件
     public UnityAction<TurnBasedController> OnTurnEventRaised;
     public UnityAction<TurnBasedController> OnPointEventRaised;
+    public UnityAction<TurnBasedController> OnGameOverEventRaised;
+
 
     public void RaiseTurnEvent(TurnBasedController turner)
     {
@@ -17,6 +19,11 @@ public class TurnEventSO : ScriptableObject
     public void RaisePointEvent(TurnBasedController turner)
     {
         OnPointEventRaised?.Invoke(turner);
+    }
+
+    public void RaiseGameOverEvent(TurnBasedController turner)
+    {
+        OnGameOverEventRaised?.Invoke(turner);
     }
 
 }

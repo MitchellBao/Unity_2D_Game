@@ -17,6 +17,7 @@ public class TurnBasedController : MonoBehaviour
     [Header("Events")]
     public UnityEvent<TurnBasedController> OnTurnChange;
     public UnityEvent<TurnBasedController> OnPointChange;
+    public UnityEvent<TurnBasedController> OnGameOver;
 
     void Start()
     {
@@ -135,14 +136,15 @@ public class TurnBasedController : MonoBehaviour
 
     private void GameOver()
     {
-        if(p1.Point == p2.Point)
+        OnGameOver?.Invoke(this);
+        if (p1.Point == p2.Point)
             Debug.Log($"游戏结束 平局");
         else
         {
             int playerid= p1.Point > p2.Point ? 1: 2;
             Debug.Log($"游戏结束,玩家:{playerid}获胜！ ");
         }
-
+        
         // 停止所有输入
         inputControl.Disable();
 
@@ -152,6 +154,7 @@ public class TurnBasedController : MonoBehaviour
             player.SetActive(false);
         }
 
-        // 这里可以添加显示结算界面：UIManager.Instance.ShowGameOver();
+        
+        
     }
 }

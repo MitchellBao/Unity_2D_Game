@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public PlayerStatusBar playerStatusBar01;
     public PlayerStatusBar playerStatusBar02;
     public TurnStatusBar turnStatusBar;
+    public GameOverPanel gameOverPanel;
     
    
     [Header("Events Listening")]
@@ -24,8 +25,24 @@ public class UIManager : MonoBehaviour
         characterEventSO.OnSkillEventRaised += OnSkillUseChange;
         turnEventSO.OnTurnEventRaised += OnTurnChange;
         turnEventSO.OnTurnEventRaised += OnPointChange;
+        turnEventSO.OnTurnEventRaised += onGameOverChange;
     }
 
+    private void onGameOverChange(TurnBasedController turner)
+    {
+        if (turner.p1.Point == turner.p2.Point)
+        {
+            gameOverPanel.ShowResult("A DRAW!");
+        }
+        else if (turner.p1.Point < turner.p2.Point)
+        {
+            gameOverPanel.ShowResult("PLAYER 02 WINS!");
+        }
+        else
+        {
+            gameOverPanel.ShowResult("PLAYER 01 WINS!");
+        }
+    }
 
     private void OnDisable()
     {
@@ -35,6 +52,8 @@ public class UIManager : MonoBehaviour
         characterEventSO.OnSkillEventRaised -= OnSkillUseChange;
         turnEventSO.OnTurnEventRaised -= OnTurnChange;
         turnEventSO.OnTurnEventRaised -= OnPointChange;
+        turnEventSO.OnTurnEventRaised += onGameOverChange;
+
     }
 
     private void OnActionPointChange(PlayerControl character)
