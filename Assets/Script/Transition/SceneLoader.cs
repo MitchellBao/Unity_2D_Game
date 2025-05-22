@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
@@ -10,43 +12,78 @@ public class SceneLoader : MonoBehaviour
 {
     [Header("Event Listening")]
     public SceneLoadEventSO loadEventSO;
-    public GameSceneSO firstLoadScene;
+    public VoidEventSO map01Event;
+    public VoidEventSO map02Event;
+
+    [Header("Scene")]
+    public GameSceneSO Map01Scene;
+    public GameSceneSO Map02Scene;
+    public GameSceneSO menuScene;
 
     private GameSceneSO currentLoadedScene;
-
-
     private GameSceneSO sceneToLoad;
-    private Vector3 positionToGo;
-    private bool fadeScreen;
 
+    private bool fadeScreen;
     public float fadeDuration;
+
+    private bool isLoading;
 
     private void Awake()
     {
-        //firstLoadScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
-        currentLoadedScene = firstLoadScene;
-        currentLoadedScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
+        //currentLoadedScene = menuScene;
+        //currentLoadedScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
+
+    }
+
+    //TODO
+
+    private void Start()
+    {
+        Debug.Log("SceneLoader Start: Attempting to load menuScene");
+        if (loadEventSO == null)
+        {
+            Debug.LogError("loadEventSO is null!");
+        }
+        loadEventSO.RaiseLoadRequestEvent(menuScene, true);
+        //Map01Game();
     }
 
     private void OnEnable()
     {
+
+        Debug.Log("Attempting to subscribe");
+
         loadEventSO.LoadRequestEvent += OnLoadRequestEvent;
+        map01Event.OnEventRaised += Map01Game;
+        map02Event.OnEventRaised += Map02Game;
     }
     private void OnDisable()
     {
         loadEventSO.LoadRequestEvent -= OnLoadRequestEvent;
+        map01Event.OnEventRaised -= Map01Game;
+        map02Event.OnEventRaised -= Map02Game;
     }
 
-    private void OnLoadRequestEvent(GameSceneSO locationToLoad, Vector3 posToGo, bool fadeScreen)
+    private void OnLoadRequestEvent(GameSceneSO locationToLoad, bool fadeScreen)
     {
+        Debug.Log("subscribe function");
+
+        if (isLoading)
+        {
+            return;
+        }
+
+        isLoading = true;
         sceneToLoad = locationToLoad;
-        positionToGo = posToGo;
         this.fadeScreen = fadeScreen;
         if (currentLoadedScene != null)
         {
             StartCoroutine(UnLoadPreviousScene());
         }
-
+        else
+        {
+            LoadNewScene();
+        }
     }
 
     private IEnumerator UnLoadPreviousScene()
@@ -57,14 +94,42 @@ public class SceneLoader : MonoBehaviour
         }
 
         yield return new WaitForSeconds(fadeDuration);
-        yield return currentLoadedScene.sceneReference.UnLoadScene();
 
+
+            yield return currentLoadedScene.sceneReference.UnLoadScene();
+        
         LoadNewScene();
     }
 
     private void LoadNewScene()
     {
-        sceneToLoad.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
+        var loadingOption = sceneToLoad.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
+        loadingOption.Completed += OnLoadCompleted;
+    }
+
+    private void OnLoadCompleted(AsyncOperationHandle<SceneInstance> obj)
+    {
+        currentLoadedScene = sceneToLoad;
+
+        if (fadeScreen)
+        {
+            //TODO
+        }
+
+        isLoading = false;
+    }
+
+    private void Map01Game()
+    {
+        Debug.Log("map01");
+        sceneToLoad = Map01Scene;
+        loadEventSO.RaiseLoadRequestEvent(sceneToLoad,true);
+    }
+    private void Map02Game()
+    {
+        Debug.Log("map02");
+        sceneToLoad = Map02Scene;
+        loadEventSO.RaiseLoadRequestEvent(sceneToLoad, true);
     }
 }
 
