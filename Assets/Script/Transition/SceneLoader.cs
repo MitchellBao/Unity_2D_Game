@@ -16,6 +16,7 @@ public class SceneLoader : MonoBehaviour
     public VoidEventSO map01Event;
     public VoidEventSO map02Event;
     public VoidEventSO menuEvent;
+    public FadeEventSO fadeEvent;
 
     [Header("Scene")]
     public GameSceneSO Map01Scene;
@@ -94,7 +95,8 @@ public class SceneLoader : MonoBehaviour
     {
         if (fadeScreen)
         {
-            //TODO
+            //Turn Black
+            fadeEvent.FadeIn(fadeDuration);
         }
 
         yield return new WaitForSeconds(fadeDuration);
@@ -117,7 +119,8 @@ public class SceneLoader : MonoBehaviour
 
         if (fadeScreen)
         {
-            //TODO
+            //Turn Transparent
+            fadeEvent.FadeOut(fadeDuration);
         }
 
         isLoading = false;
