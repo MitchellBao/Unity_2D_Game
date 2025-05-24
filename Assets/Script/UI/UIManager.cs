@@ -3,19 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.InputManagerEntry;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-
+    [Header("Components")]
     public PlayerStatusBar playerStatusBar01;
     public PlayerStatusBar playerStatusBar02;
     public TurnStatusBar turnStatusBar;
     public GameOverPanel gameOverPanel;
+    public GameObject helpPanel;
+    public Button helpButton;
     
    
     [Header("Events Listening")]
     public CharacterEventSO characterEventSO;
     public TurnEventSO turnEventSO;
+
+
+    private void Awake()
+    {
+        helpButton.onClick.AddListener(ToggleHelpPanel);    
+    }
 
     private void OnEnable()
     {
@@ -54,6 +63,18 @@ public class UIManager : MonoBehaviour
         turnEventSO.OnTurnEventRaised -= OnPointChange;
         turnEventSO.OnTurnEventRaised += onGameOverChange;
 
+    }
+
+    private void ToggleHelpPanel()
+    {
+        if (helpPanel.activeInHierarchy)
+        {
+            helpPanel.SetActive(false);
+        }
+        else
+        {
+            helpPanel.SetActive(true);
+        }
     }
 
     private void OnActionPointChange(PlayerControl character)
