@@ -51,7 +51,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         // 自动获取所有子对象中的技能
-        skills.AddRange(GetComponentsInChildren<SkillBase>());
+        //skills.AddRange(GetComponentsInChildren<SkillBase>());
 
         foreach (var skill in skills)
         {
@@ -70,7 +70,6 @@ public class PlayerControl : MonoBehaviour
         inputControl = new PlayerInputControl();
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main; // 获取主相机
-        InitializeSkills();
     }
    
     private void OnEnable()
