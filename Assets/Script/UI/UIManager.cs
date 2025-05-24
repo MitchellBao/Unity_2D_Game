@@ -70,10 +70,12 @@ public class UIManager : MonoBehaviour
         if (helpPanel.activeInHierarchy)
         {
             helpPanel.SetActive(false);
+            Time.timeScale = 1;
         }
         else
         {
             helpPanel.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 

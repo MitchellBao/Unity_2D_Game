@@ -443,7 +443,7 @@ MonoBehaviour:
   Map01Scene: {fileID: 11400000, guid: d8fa5315f60a96e40881b23abe9e23ab, type: 2}
   Map02Scene: {fileID: 11400000, guid: 40a17a67d40f88948bf1d80305ed1a1c, type: 2}
   menuScene: {fileID: 11400000, guid: 3d40a439eeee12f45a9c7e60da779d09, type: 2}
-  fadeDuration: 1
+  fadeDuration: 0.7
 --- !u!4 &1456733315
 Transform:
   m_ObjectHideFlags: 0
