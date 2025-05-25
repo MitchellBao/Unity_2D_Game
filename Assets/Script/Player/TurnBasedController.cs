@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,36 +8,51 @@ public class TurnBasedController : MonoBehaviour
     public PointAreaControl p1, p2;
     public PlayerInputControl inputControl; // 你的输入系统
     public PlayerControl[] players;        // 两个角色的控制脚本
-    private int currentPlayerIndex = 0;    // 当前控制的角色索引
+    private int currentPlayerIndex = 1;    // 当前控制的角色索引
     public int maxRounds = 100;     // 最大回合数
     public int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
     public LayerMask playerLayer; // 在Inspector中设置需要检测的层级
+    public int characterIndex01;
+    public int characterIndex02;
 
     [Header("Events")]
     public UnityEvent<TurnBasedController> OnTurnChange;
     public UnityEvent<TurnBasedController> OnPointChange;
     public UnityEvent<TurnBasedController> OnGameOver;
 
-
-    //void Start()
-    //{
-    //    //PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
-    //    //spawner.SpawnSelectedPlayers(1, 1); // 选择角色
-    //    //OnPointChange?.Invoke(this);
-    //}
-
-    public void GeneratePlayersFromSelection(int index1, int index2)
+    void Start()
     {
         PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
-        spawner.SpawnSelectedPlayers(index1, index2); // 生成角色
+        spawner.SpawnSelectedPlayers(characterIndex01, characterIndex02); // 选择角色
+        OnPointChange?.Invoke(this);
+    }
+    public void InitializePlayers(PlayerControl[] newPlayers)
+    {
+        List<PlayerControl> validPlayers = new List<PlayerControl>();
 
-        // 初始化玩家引用
+        foreach (var player in newPlayers)
+        {
+            if (IsInPlayerLayer(player.gameObject))
+            {
+                validPlayers.Add(player);
+            }
+        }
+
+        players = validPlayers.ToArray();
+    }
+
+    private void Awake()
+    {
+        inputControl = new PlayerInputControl();
+
+        // 获取所有PlayerControl组件
         PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
         List<PlayerControl> filteredPlayers = new List<PlayerControl>();
 
         foreach (PlayerControl player in allPlayers)
         {
+            // 检查对象是否在指定层
             if (IsInPlayerLayer(player.gameObject))
             {
                 filteredPlayers.Add(player);
@@ -46,45 +60,6 @@ public class TurnBasedController : MonoBehaviour
         }
 
         players = filteredPlayers.ToArray();
-        inputControl = new PlayerInputControl();
-
-        UpdateControlState();
-        OnPointChange?.Invoke(this);
-    }
-
-
-    //public void InitializePlayers(PlayerControl[] newPlayers)
-    //{
-    //    List<PlayerControl> validPlayers = new List<PlayerControl>();
-
-    //    foreach (var player in newPlayers)
-    //    {
-    //        if (IsInPlayerLayer(player.gameObject))
-    //        {
-    //            validPlayers.Add(player);
-    //        }
-    //    }
-
-    //    players = validPlayers.ToArray();
-    //}
-
-    private void Awake()
-    {
-
-        //// 获取所有PlayerControl组件
-        //PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
-        //List<PlayerControl> filteredPlayers = new List<PlayerControl>();
-
-        //foreach (PlayerControl player in allPlayers)
-        //{
-        //    // 检查对象是否在指定层
-        //    if (IsInPlayerLayer(player.gameObject))
-        //    {
-        //        filteredPlayers.Add(player);
-        //    }
-        //}
-
-        //players = filteredPlayers.ToArray();
     }
 
     // 新增的层检测方法
@@ -93,57 +68,26 @@ public class TurnBasedController : MonoBehaviour
         // 使用位运算检查层掩码
         return (playerLayer.value & (1 << obj.layer)) != 0;
     }
-
-
     private void OnEnable()
     {
-        // 确保 inputControl 被初始化后启用
-        if (inputControl == null)
-        {
-            return;
-        }
-
         inputControl.Enable();
-        inputControl.GamePlay.FinishRound.performed += _ => SwitchCharacter(); // 结束回合
+        inputControl.GamePlay.FinishRound.performed += _ => SwitchCharacter();//主动结束
+        UpdateControlState(); // 初始化控制状态
     }
-
-    private void OnDisable()
-    {
-        if (inputControl == null)
-        {
-            return; // 如果 inputControl 未初始化，则不做任何操作
-        }
-
-        inputControl.Disable();
-        inputControl.GamePlay.FinishRound.performed -= _ => SwitchCharacter(); // 取消结束回合事件
-    }
-
-    //private void OnEnable()
-    //{
-    //    inputControl.Enable();
-    //    inputControl.GamePlay.FinishRound.performed += _ => SwitchCharacter();//主动结束
-    //    UpdateControlState(); // 初始化控制状态
-    //}
-
-    private void OnSelectionFinished(SelectButton selectButton)
-    {
-        throw new NotImplementedException();
-    }
-
     private void Update()
     {
         // 持续检测当前角色行动点是否耗尽
-        if (inputControl != null && players[currentPlayerIndex].Point <= 0 && !players[currentPlayerIndex].isFrozen && !players[currentPlayerIndex].duringSkill)
+        if (players[currentPlayerIndex].Point <= 0&& !players[currentPlayerIndex].isFrozen&& !players[currentPlayerIndex].duringSkill)
         {
             SwitchCharacter();
         }
         OnPointChange?.Invoke(this);
     }
-    //private void OnDisable()
-    //{
-    //    inputControl.Disable();
-    //    inputControl.GamePlay.FinishRound.performed -= _ => SwitchCharacter();
-    //}
+    private void OnDisable()
+    {
+        inputControl.Disable();
+        inputControl.GamePlay.FinishRound.performed -= _ => SwitchCharacter();
+    }
 
     //切换角色控制权
     private void SwitchCharacter()
@@ -177,7 +121,7 @@ public class TurnBasedController : MonoBehaviour
         Debug.Log($"切换到角色: {currentPlayerIndex + 1}");
         OnTurnChange?.Invoke(this);
     }
-
+    
     // 更新角色输入状态
     private void UpdateControlState()
     {
@@ -194,12 +138,12 @@ public class TurnBasedController : MonoBehaviour
 
     private void GameOver()
     {
-
+        
         if (p1.Point == p2.Point)
             Debug.Log($"游戏结束 平局");
         else
         {
-            int playerid = p1.Point > p2.Point ? 1 : 2;
+            int playerid= p1.Point > p2.Point ? 1: 2;
             Debug.Log($"游戏结束,玩家:{playerid}获胜！ ");
         }
 
@@ -213,8 +157,7 @@ public class TurnBasedController : MonoBehaviour
             player.SetActive(false);
         }
 
-
-
+        
+        
     }
 }
-

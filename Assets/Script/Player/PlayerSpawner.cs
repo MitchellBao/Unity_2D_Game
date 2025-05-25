@@ -28,25 +28,25 @@ public class PlayerSpawner : MonoBehaviour
             return;
         }
     }
-    //private void InitializeTurnController()
-    //{
-    //    TurnBasedController controller = FindObjectOfType<TurnBasedController>();
-    //    if (controller != null)
-    //    {
-    //        // 获取所有PlayerControl组件
-    //        PlayerControl[] players = FindObjectsOfType<PlayerControl>();
+    private void InitializeTurnController()
+    {
+        TurnBasedController controller = FindObjectOfType<TurnBasedController>();
+        if (controller != null)
+        {
+            // 获取所有PlayerControl组件
+            PlayerControl[] players = FindObjectsOfType<PlayerControl>();
 
-    //        // 确保只获取我们生成的玩家
-    //        if (players.Length >= 2)
-    //        {
-    //            controller.InitializePlayers(players);
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError("未找到足够的玩家对象！");
-    //        }
-    //    }
-    //}
+            // 确保只获取我们生成的玩家
+            if (players.Length >= 2)
+            {
+                controller.InitializePlayers(players);
+            }
+            else
+            {
+                Debug.LogError("未找到足够的玩家对象！");
+            }
+        }
+    }
     //外部调用的生成方法
     public void SpawnSelectedPlayers(int player1ID, int player2ID)
     {
@@ -56,9 +56,9 @@ public class PlayerSpawner : MonoBehaviour
         // 生成玩家1,2
         SpawnPlayer(player1ID, 0);
         SpawnPlayer(player2ID, 1);
-
+        // 通知回合控制器初始化
+        InitializeTurnController();
     }
-
 
     private void SpawnPlayer(int characterID, int spawnIndex)
     {
