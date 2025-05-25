@@ -799,6 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f0011e2648efe4487cbe8f93b276bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatarImage: {fileID: 2005542511}
   actionPointImage: {fileID: 467912145}
   actionPointDelayImage: {fileID: 1039937938}
   skillImage: {fileID: 12118959}
@@ -13852,6 +13853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f0011e2648efe4487cbe8f93b276bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatarImage: {fileID: 879105778}
   actionPointImage: {fileID: 1028443429}
   actionPointDelayImage: {fileID: 1184611396}
   skillImage: {fileID: 1941651721}
@@ -31091,6 +31093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selector: {fileID: 859395292}
   text: {fileID: 1855551998}
+  playerStatusBar01: {fileID: 183971830}
   IsSelected: 0
 --- !u!1 &1506753007
 GameObject:
@@ -31294,6 +31297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selector: {fileID: 718798300}
   text: {fileID: 1807483485}
+  playerStatusBar02: {fileID: 364797408}
   IsSelected: 0
 --- !u!1 &1581248976
 GameObject:
@@ -33293,8 +33297,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -35746,7 +35750,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

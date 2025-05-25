@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerStatusBar : MonoBehaviour
 {
+    public Image avatarImage;
     public Image actionPointImage;
     public Image actionPointDelayImage;
     public Image skillImage;

@@ -11,6 +11,7 @@ public class Selector02 : MonoBehaviour
 
     public TMP_Dropdown selector;
     public TMP_Text text;
+    public PlayerStatusBar playerStatusBar02;
 
     Data.CharacterInfo[] characterList;
 
@@ -44,6 +45,8 @@ public class Selector02 : MonoBehaviour
         IsSelected = true;
         Data.CharacterInfo info = characterList[index];
         Header02.Instance.SetInfo(info);
+        Sprite sprite = Resources.Load<Sprite>(info.avatar);
+        playerStatusBar02.avatarImage.sprite = sprite;
     }
 
 
