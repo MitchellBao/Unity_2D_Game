@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,38 +20,25 @@ public class TurnBasedController : MonoBehaviour
     public UnityEvent<TurnBasedController> OnPointChange;
     public UnityEvent<TurnBasedController> OnGameOver;
 
+
     void Start()
     {
+        //PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
+        //spawner.SpawnSelectedPlayers(1, 1); // 选择角色
+        //OnPointChange?.Invoke(this);
+    }
+
+    public void GeneratePlayersFromSelection(int index1, int index2)
+    {
         PlayerSpawner spawner = FindObjectOfType<PlayerSpawner>();
-        spawner.SpawnSelectedPlayers(1, 3); // 选择角色
-        OnPointChange?.Invoke(this);
-    }
-    public void InitializePlayers(PlayerControl[] newPlayers)
-    {
-        List<PlayerControl> validPlayers = new List<PlayerControl>();
+        spawner.SpawnSelectedPlayers(index1, index2); // 生成角色
 
-        foreach (var player in newPlayers)
-        {
-            if (IsInPlayerLayer(player.gameObject))
-            {
-                validPlayers.Add(player);
-            }
-        }
-
-        players = validPlayers.ToArray();
-    }
-
-    private void Awake()
-    {
-        inputControl = new PlayerInputControl();
-
-        // 获取所有PlayerControl组件
+        // 初始化玩家引用
         PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
         List<PlayerControl> filteredPlayers = new List<PlayerControl>();
 
         foreach (PlayerControl player in allPlayers)
         {
-            // 检查对象是否在指定层
             if (IsInPlayerLayer(player.gameObject))
             {
                 filteredPlayers.Add(player);
@@ -58,6 +46,45 @@ public class TurnBasedController : MonoBehaviour
         }
 
         players = filteredPlayers.ToArray();
+
+        UpdateControlState();
+        OnPointChange?.Invoke(this);
+    }
+
+
+    //public void InitializePlayers(PlayerControl[] newPlayers)
+    //{
+    //    List<PlayerControl> validPlayers = new List<PlayerControl>();
+
+    //    foreach (var player in newPlayers)
+    //    {
+    //        if (IsInPlayerLayer(player.gameObject))
+    //        {
+    //            validPlayers.Add(player);
+    //        }
+    //    }
+
+    //    players = validPlayers.ToArray();
+    //}
+
+    private void Awake()
+    {
+        inputControl = new PlayerInputControl();
+
+        //// 获取所有PlayerControl组件
+        //PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
+        //List<PlayerControl> filteredPlayers = new List<PlayerControl>();
+
+        //foreach (PlayerControl player in allPlayers)
+        //{
+        //    // 检查对象是否在指定层
+        //    if (IsInPlayerLayer(player.gameObject))
+        //    {
+        //        filteredPlayers.Add(player);
+        //    }
+        //}
+
+        //players = filteredPlayers.ToArray();
     }
 
     // 新增的层检测方法
@@ -72,6 +99,12 @@ public class TurnBasedController : MonoBehaviour
         inputControl.GamePlay.FinishRound.performed += _ => SwitchCharacter();//主动结束
         UpdateControlState(); // 初始化控制状态
     }
+
+    private void OnSelectionFinished(SelectButton selectButton)
+    {
+        throw new NotImplementedException();
+    }
+
     private void Update()
     {
         // 持续检测当前角色行动点是否耗尽

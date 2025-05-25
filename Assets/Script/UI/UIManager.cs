@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public GameObject helpPanel;
     public Button helpButton;
     
+    
    
     [Header("Events Listening")]
     public CharacterEventSO characterEventSO;
@@ -23,8 +24,9 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        helpButton.onClick.AddListener(ToggleHelpPanel);    
+        helpButton.onClick.AddListener(ToggleHelpPanel);
     }
+
 
     private void OnEnable()
     {
@@ -78,6 +80,15 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0;
         }
     }
+
+    //private void FadeOutCharacterSelectPanel()
+    //{
+    //    if (characterSelectPanel.activeInHierarchy)
+    //    {
+    //        characterSelectPanel.SetActive(false);
+    //        gameStartButton.gameObject.SetActive(false);
+    //    }
+    //}
 
     private void OnActionPointChange(PlayerControl character)
     {

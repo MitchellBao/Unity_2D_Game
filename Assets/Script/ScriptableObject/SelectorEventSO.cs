@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class SelectorEventSO : MonoBehaviour
+[CreateAssetMenu(menuName = "Event/SelectorEventSO")]
+public class SelectorEventSO : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    public UnityAction<SelectButton> OnSelectionFinishedEventRaised;
+
+    public void RaiseSelectionFinishedEvent(SelectButton selectButton)
     {
-        
+        OnSelectionFinishedEventRaised?.Invoke(selectButton);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

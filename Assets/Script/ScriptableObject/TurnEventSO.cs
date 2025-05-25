@@ -10,6 +10,7 @@ public class TurnEventSO : ScriptableObject
     public UnityAction<TurnBasedController> OnTurnEventRaised;
     public UnityAction<TurnBasedController> OnPointEventRaised;
     public UnityAction<TurnBasedController> OnGameOverEventRaised;
+    
 
 
     public void RaiseTurnEvent(TurnBasedController turner)
