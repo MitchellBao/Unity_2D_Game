@@ -9,6 +9,8 @@ public class TeleportationSkill : SkillBase
     [Header("瞬移技能设置")]
     public float teleportDistance = 3f;  // 瞬移距离（以网格为单位）
     public LayerMask collisionLayer;     // 碰撞检测层
+    public LayerMask obstacleLayer;      // 可摧毁障碍物层
+    public LayerMask obstacleBkLayer;    // 背景障碍物层
     private Vector2 skillDirection;
     private bool isSelectingDirection = false;
     private Vector2 selectedDirection = Vector2.zero;
@@ -80,37 +82,52 @@ public class TeleportationSkill : SkillBase
     }
     Vector2 CalculateTeleportPosition(Vector2 direction)
     {
-        Vector2 targetPos = (Vector2)owner.transform.position + (direction * teleportDistance * owner.gridSize);
+        Vector2 finalPosition = (Vector2)owner.transform.position;
 
-        // 连续检测2格路径上的碰撞
-        for (int i = 1; i <= 2; i++)
+        // 检查路径上的每一格
+        for (int i = 1; i <= teleportDistance; i++)
         {
             Vector2 checkPos = (Vector2)owner.transform.position + (direction * i * owner.gridSize);
 
-            // 如果碰到不可穿透的障碍，停在障碍前
-            if (Physics2D.OverlapCircle(checkPos, 0.2f, collisionLayer))
+            // 检查可摧毁障碍物
+            Collider2D destroyableObstacle = Physics2D.OverlapCircle(checkPos, 0.2f, obstacleLayer);
+            if (destroyableObstacle != null)
             {
-                targetPos = checkPos - (direction * 0.1f); // 稍微后退避免卡住
+                // 摧毁障碍物并可以继续前进
+                Obstacle obstacle = destroyableObstacle.GetComponent<Obstacle>();
+                if (obstacle != null)
+                {
+                    obstacle.TakeDamage();
+                }
+                finalPosition = checkPos;
+                continue;
+            }
+
+            // 检查背景障碍物
+            if (Physics2D.OverlapCircle(checkPos, 0.2f, obstacleBkLayer))
+            {
+                // 遇到背景障碍物就停在当前位置
+                return finalPosition;
+            }
+
+            // 检查是否超出移动范围
+            if (i == teleportDistance)
+            {
+                finalPosition = checkPos;
                 break;
             }
+
+            // 更新最终位置
+            finalPosition = checkPos;
         }
 
-        return targetPos;
+        return finalPosition;
     }
 
     void PerformTeleport(Vector2 targetPosition)
     {
-        // 先禁用碰撞体实现"穿透"
-        Collider2D col = owner.GetComponent<Collider2D>();
-        bool originalColliderState = col.enabled;
-        col.enabled = false;
-
-        // 执行瞬移
+        // 直接瞬移到目标位置
         owner.transform.position = targetPosition;
-
-        // 恢复碰撞体
-        col.enabled = originalColliderState;
     }
-
-
 }
+

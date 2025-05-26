@@ -44777,6 +44777,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8650852927188582904, guid: 1411bb79f2e08134fae1e22427138c50, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8650852927188582904, guid: 1411bb79f2e08134fae1e22427138c50, type: 3}
+      propertyPath: obstacleBkLayer.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
