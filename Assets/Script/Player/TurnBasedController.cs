@@ -7,9 +7,9 @@ public class TurnBasedController : MonoBehaviour
     public PointAreaControl p1, p2;
     public PlayerInputControl inputControl; // 你的输入系统
     public PlayerControl[] players;        // 两个角色的控制脚本
-    public int currentPlayerIndex = 1;    // 当前控制的角色索引
+    public int currentPlayerIndex = 0;    // 当前控制的角色索引
     public int maxRounds = 100;     // 最大回合数
-    public int currentRound = 0;   // 当前回合数
+    public int currentRound = 1;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
     public LayerMask playerLayer; // 在Inspector中设置需要检测的层级
     public int characterIndex01;
@@ -108,8 +108,9 @@ public class TurnBasedController : MonoBehaviour
             currentRound++;
 
             // 检查回合限制
-            if (currentRound >= maxRounds)
+            if (currentRound > maxRounds)
             {
+                OnTurnChange?.Invoke(this);
                 GameOver();
                 return;
             }

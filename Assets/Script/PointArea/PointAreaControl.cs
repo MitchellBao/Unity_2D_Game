@@ -37,6 +37,6 @@ public class PointAreaControl : MonoBehaviour
         {
             Point += 1;
         }
-
+        
     }
 }

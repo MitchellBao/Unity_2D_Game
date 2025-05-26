@@ -1169,6 +1169,7 @@ MonoBehaviour:
   player:
     serializedVersion: 2
     m_Bits: 128
+  turnBasedController: {fileID: 681014946}
 --- !u!61 &326373444
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -31379,6 +31380,7 @@ MonoBehaviour:
   player:
     serializedVersion: 2
     m_Bits: 128
+  turnBasedController: {fileID: 681014946}
 --- !u!61 &1608134838
 BoxCollider2D:
   m_ObjectHideFlags: 0

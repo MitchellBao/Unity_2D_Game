@@ -148,7 +148,7 @@ public class UIManager : MonoBehaviour
 
     private void OnTurnChange(TurnBasedController turner)
     {
-        var percentage = (float)turner.currentRound / turner.maxRounds;
+        var percentage = (float)(turner.currentRound - 1)/ turner.maxRounds;
         turnStatusBar.OnTurnChange(percentage);
     }
 

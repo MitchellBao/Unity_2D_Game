@@ -25,6 +25,8 @@ public class DiamondCheck : MonoBehaviour
             PlayerControl.isGetDiamond = true;
             PlayerControl.diamondKind=other.gameObject.GetComponent<Diamond>().DiamondKinds;
             Destroy(other.gameObject);
-       }
+            // 新增：触发UI更新
+            PlayerControl.OnDiamondStatusChange?.Invoke(PlayerControl);
+        }
     }
 }

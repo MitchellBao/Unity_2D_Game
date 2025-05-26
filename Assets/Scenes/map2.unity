@@ -1090,7 +1090,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Virtual Guy
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
   m_sharedMaterial: {fileID: -4167336628293307005, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
@@ -5253,7 +5253,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Virtual Guy
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
   m_sharedMaterial: {fileID: -4167336628293307005, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
@@ -7167,6 +7167,7 @@ MonoBehaviour:
   player:
     serializedVersion: 2
     m_Bits: 128
+  turnBasedController: {fileID: 1160206987}
 --- !u!61 &792330457
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28960,6 +28961,7 @@ MonoBehaviour:
   player:
     serializedVersion: 2
     m_Bits: 128
+  turnBasedController: {fileID: 1160206987}
 --- !u!61 &972587373
 BoxCollider2D:
   m_ObjectHideFlags: 0
