@@ -46,6 +46,7 @@ public class PlayerSpawner : MonoBehaviour
             {
                 Debug.LogError("未找到足够的玩家对象！");
             }
+
         }
     }
     //public void ClearExistingPlayers()

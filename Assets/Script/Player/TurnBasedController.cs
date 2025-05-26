@@ -36,8 +36,6 @@ public class TurnBasedController : MonoBehaviour
                 validPlayers.Add(player);
             }
         }
-        //players = new PlayerControl[0]; // 直接赋值为空数组
-        //currentPlayerIndex = 1; // 重置当前玩家索引
         players = validPlayers.ToArray();
     }
 
@@ -133,7 +131,7 @@ public class TurnBasedController : MonoBehaviour
         }
     }
 
-    public void ClearExistingPlayers()
+    public void Clear()
     {
         PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
         foreach (var player in allPlayers)
@@ -146,6 +144,16 @@ public class TurnBasedController : MonoBehaviour
         }
         players = new PlayerControl[0];
         currentPlayerIndex = 0;
+
+        Obstacle[] allBlocks = FindObjectsOfType<Obstacle>();
+        Debug.Log($"销毁旧箱子");
+        foreach (var block in allBlocks)
+        {
+            if (block != null)
+            {
+                Destroy(block.gameObject);
+            }
+        }
     }
     private void GameOver()
     {
@@ -163,7 +171,7 @@ public class TurnBasedController : MonoBehaviour
             if (player.GetComponent<PlayerControl>().playerIndex == 5 || player.GetComponent<PlayerControl>().playerIndex == 6)
                 player.GetComponent<PlayerControl>().playerIndex = -1;
         }
-        ClearExistingPlayers();
+        Clear();
         OnGameOver?.Invoke(this);
         inputControl.Disable();// 停止所有输入
         

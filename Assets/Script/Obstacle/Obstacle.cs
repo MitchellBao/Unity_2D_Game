@@ -55,12 +55,10 @@ public class Obstacle : MonoBehaviour
     [Header("交互效果")]
     public ParticleSystem destroyEffect;
     public AudioClip destroySound;
-    // Obstacle.cs
     
     
     
 
-    // 被攻击或踩踏时调用
     public void TakeDamage()
     {
         if (health <= 0) return;
