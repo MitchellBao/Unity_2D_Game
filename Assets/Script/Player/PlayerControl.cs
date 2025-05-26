@@ -454,7 +454,6 @@ public class PlayerControl : MonoBehaviour
         OnFrozenStatusChange?.Invoke(this);
 
     }
-
     private void Update()
     {
 

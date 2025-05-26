@@ -4801,7 +4801,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 632, y: 0}
+  m_AnchoredPosition: {x: 501, y: 0}
   m_SizeDelta: {x: 153.4804, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &487852073
@@ -5366,8 +5366,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -492}
-  m_SizeDelta: {x: 254.2063, y: 50}
+  m_AnchoredPosition: {x: 8.9614, y: -481.6725}
+  m_SizeDelta: {x: 272.1293, y: 52.235}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &549816221
 MonoBehaviour:
@@ -5539,7 +5539,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -58.981796, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -40150,6 +40150,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  currentPlayerIndex: 1
   maxRounds: 10
   currentRound: 0
   playerLayer:
@@ -45105,6 +45106,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1924914845}
     m_Modifications:
+    - target: {fileID: 1386990156263280301, guid: 8e918a1fc9f048d459f751754b790b13, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -553
+      objectReference: {fileID: 0}
     - target: {fileID: 4311226842440827270, guid: 8e918a1fc9f048d459f751754b790b13, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -45193,6 +45198,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: d8430438e23751f47a925859651c556d, type: 3}
+    - target: {fileID: 6491212173951979222, guid: 8e918a1fc9f048d459f751754b790b13, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -120
+      objectReference: {fileID: 0}
     - target: {fileID: 7622336643572295431, guid: 8e918a1fc9f048d459f751754b790b13, type: 3}
       propertyPath: m_Name
       value: Header02

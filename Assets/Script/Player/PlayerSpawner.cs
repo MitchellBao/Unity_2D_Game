@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -47,11 +48,24 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
     }
+    //public void ClearExistingPlayers()
+    //{
+    //    // 查找所有带有PlayerControl组件的对象
+    //    PlayerControl[] playerControls = FindObjectsOfType<PlayerControl>();
+
+    //    foreach (var control in playerControls)
+    //    {
+    //        if (control.playerIndex == 5 || control.playerIndex == 6)
+    //        {
+    //            Destroy(control.gameObject);
+    //        }
+    //    }
+    //}
+    
+
     //外部调用的生成方法
     public void SpawnSelectedPlayers(int player1ID, int player2ID)
     {
-        // 清除场景中可能存在的旧角色
-        //ClearExistingPlayers();
 
         // 生成玩家1,2
         SpawnPlayer(player1ID, 0);
@@ -114,13 +128,4 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    private void ClearExistingPlayers()
-    {
-        // 查找所有现有玩家对象
-        PlayerControl[] existingPlayers = FindObjectsOfType<PlayerControl>();
-        foreach (PlayerControl player in existingPlayers)
-        {
-            Destroy(player.gameObject);
-        }
-    }
 }

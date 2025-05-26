@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
 public class TurnBasedController : MonoBehaviour
 {
     public PointAreaControl p1, p2;
     public PlayerInputControl inputControl; // 你的输入系统
     public PlayerControl[] players;        // 两个角色的控制脚本
-    private int currentPlayerIndex = 1;    // 当前控制的角色索引
+    public int currentPlayerIndex = 1;    // 当前控制的角色索引
     public int maxRounds = 100;     // 最大回合数
     public int currentRound = 0;   // 当前回合数
     //public Text roundText;          // UI显示回合数的Text组件
@@ -30,7 +29,6 @@ public class TurnBasedController : MonoBehaviour
     public void InitializePlayers(PlayerControl[] newPlayers)
     {
         List<PlayerControl> validPlayers = new List<PlayerControl>();
-
         foreach (var player in newPlayers)
         {
             if (IsInPlayerLayer(player.gameObject))
@@ -38,7 +36,8 @@ public class TurnBasedController : MonoBehaviour
                 validPlayers.Add(player);
             }
         }
-
+        //players = new PlayerControl[0]; // 直接赋值为空数组
+        //currentPlayerIndex = 1; // 重置当前玩家索引
         players = validPlayers.ToArray();
     }
 
@@ -104,7 +103,6 @@ public class TurnBasedController : MonoBehaviour
         if (currentPlayerIndex == 0)
         {
             currentRound++;
-            UpdateRoundUI();
 
             // 检查回合限制
             if (currentRound >= maxRounds)
@@ -130,12 +128,21 @@ public class TurnBasedController : MonoBehaviour
             players[i].SetActive(i == currentPlayerIndex); // 只有当前角色可操作
         }
     }
-    private void UpdateRoundUI()
-    {
-        //if (roundText != null)
-        //    roundText.text = $"回合: {currentRound}/{maxRounds}";
-    }
 
+    public void ClearExistingPlayers()
+    {
+        PlayerControl[] allPlayers = FindObjectsOfType<PlayerControl>();
+        foreach (var player in allPlayers)
+        {
+            if (player != null && (player.playerIndex == -1))
+            {
+                Debug.Log($"销毁旧玩家：{player.name} (ID:{player.playerIndex})");
+                Destroy(player.gameObject);
+            }
+        }
+        players = new PlayerControl[0];
+        currentPlayerIndex = 0;
+    }
     private void GameOver()
     {
         
@@ -146,18 +153,16 @@ public class TurnBasedController : MonoBehaviour
             int playerid= p1.Point > p2.Point ? 1: 2;
             Debug.Log($"游戏结束,玩家:{playerid}获胜！ ");
         }
-
-        OnGameOver?.Invoke(this);
-        // 停止所有输入
-        inputControl.Disable();
-
-        // 禁用所有玩家控制
         foreach (var player in players)
         {
             player.SetActive(false);
+            if (player.GetComponent<PlayerControl>().playerIndex == 5 || player.GetComponent<PlayerControl>().playerIndex == 6)
+                player.GetComponent<PlayerControl>().playerIndex = -1;
         }
-
+        ClearExistingPlayers();
+        OnGameOver?.Invoke(this);
+        inputControl.Disable();// 停止所有输入
         
-        
+        currentRound = 0;
     }
 }
