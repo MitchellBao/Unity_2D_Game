@@ -5,12 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-
 public class Selector01 : MonoBehaviour
 {
-
     public TMP_Dropdown selector;
-    public TMP_Text text;
+    public TMP_Text text;  // 这个是显示角色名的 Text
     public PlayerStatusBar playerStatusBar01;
 
     Data.CharacterInfo[] characterList;
@@ -21,6 +19,14 @@ public class Selector01 : MonoBehaviour
     {
         selector.onValueChanged.AddListener(SelectChange);
         Setoptions();
+
+        // 默认选择第一个选项
+        selector.value = 0;  // 设置为第一个选项
+        SelectChange(0);  // 立即触发选择逻辑
+        IsSelected = true;  // 确保角色已选择
+
+        // 只设置 Dropdown 显示框默认文本为 "Virtual Guy"
+        selector.captionText.text = "Virtual Guy";  // 直接修改 Dropdown 选择框的显示文本
     }
 
     public int GetSelectedIndex()
@@ -32,13 +38,14 @@ public class Selector01 : MonoBehaviour
     {
         selector.options.Clear();
         characterList = Data.GetCharacterList();
-        for (int i = 0; i <  characterList.Length; i++)
+
+        // 将实际的角色名称作为选项添加到 Dropdown 中
+        for (int i = 0; i < characterList.Length; i++)
         {
             TMP_Dropdown.OptionData item = new TMP_Dropdown.OptionData();
             item.text = characterList[i].name;
             selector.options.Add(item);
         }
-
     }
 
     private void SelectChange(int index)
@@ -49,8 +56,7 @@ public class Selector01 : MonoBehaviour
         Sprite sprite = Resources.Load<Sprite>(info.avatar);
         playerStatusBar01.avatarImage.sprite = sprite;
 
+        // 更新 Dropdown 显示框的文本
+        selector.captionText.text = info.name;  // 更新为当前选择角色的名字
     }
-
-
-
 }

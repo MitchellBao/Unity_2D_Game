@@ -75,10 +75,13 @@ public class TurnBasedController : MonoBehaviour
     }
     private void Update()
     {
-        // 持续检测当前角色行动点是否耗尽
-        if (players[currentPlayerIndex].Point <= 0&& !players[currentPlayerIndex].isFrozen&& !players[currentPlayerIndex].duringSkill)
+        if (currentPlayerIndex >= 0 && currentPlayerIndex < players.Length && players[currentPlayerIndex] != null)
         {
-            SwitchCharacter();
+            // 持续检测当前角色行动点是否耗尽
+            if (players[currentPlayerIndex].Point <= 0 && !players[currentPlayerIndex].isFrozen && !players[currentPlayerIndex].duringSkill)
+            {
+                SwitchCharacter();
+            }
         }
         OnPointChange?.Invoke(this);
     }
