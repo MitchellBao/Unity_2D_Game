@@ -44778,6 +44778,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8650852927188582904, guid: 1411bb79f2e08134fae1e22427138c50, type: 3}
+      propertyPath: description
+      value: "\u7A7F\u8FC7\u53EF\u6467\u6BC1\u969C\u788D\u7269\u5E76\u77AC\u79FB3\u683C"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8650852927188582904, guid: 1411bb79f2e08134fae1e22427138c50, type: 3}
       propertyPath: obstacleLayer.m_Bits
       value: 256
       objectReference: {fileID: 0}
@@ -44862,6 +44866,10 @@ PrefabInstance:
       propertyPath: poisonousGemPrefab
       value: 
       objectReference: {fileID: 895806093}
+    - target: {fileID: 7975638326858689464, guid: afcea1c526cd5a347b94ac63e493c4db, type: 3}
+      propertyPath: cooldownRounds
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45056,6 +45064,14 @@ PrefabInstance:
       propertyPath: poisonousGemPrefab
       value: 
       objectReference: {fileID: 895806093}
+    - target: {fileID: 7169444585467915037, guid: 8f1d565179a8ba142a378209e2d69832, type: 3}
+      propertyPath: description
+      value: "\u5077\u53D6\u5B9D\u77F3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7169444585467915037, guid: 8f1d565179a8ba142a378209e2d69832, type: 3}
+      propertyPath: cooldownRounds
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45128,6 +45144,14 @@ PrefabInstance:
     - target: {fileID: 5098834436674072789, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805517204804563407, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
+      propertyPath: cooldownRounds
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805517204804563407, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
+      propertyPath: actionPointCost
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8225960248275224408, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
       propertyPath: m_Name

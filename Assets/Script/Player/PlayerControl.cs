@@ -354,7 +354,6 @@ public class PlayerControl : MonoBehaviour
                 return greenGemPrefab;
             case DiamondKinds.poisonousDiamond:
                 return poisonousGemPrefab;
-            // 添加更多种类...
             default:
                 Debug.LogWarning($"未知宝石种类: {kind}, 使用红色宝石作为默认");
                 return redGemPrefab;
@@ -460,17 +459,14 @@ public class PlayerControl : MonoBehaviour
         // Skills Usability Check
         isSkillUsable = (skills.Count > 0) && skills[0].CanUse();
 
-        //没做ui之前的可视化宝石持有
+        //可视化宝石持有
         if (isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.cyan;
         if (isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.white;
         if (!isActive && !isGetDiamond) GetComponent<SpriteRenderer>().color = Color.gray;
         if (!isActive && isGetDiamond) GetComponent<SpriteRenderer>().color = Color.black;
-        //
+     
         if (isFrozen) GetComponent<SpriteRenderer>().color = Color.blue;
-        //
-        //避免被冻恢复以后卡主
-        //EnterSkillTargetingMode(currentActiveSkill);
-        //ExitSkillTargetingMode();
+        
 
         //回合检测+冷却
         if (!isActive || Time.time - lastSwitchTime < inputCooldown)
@@ -484,7 +480,6 @@ public class PlayerControl : MonoBehaviour
         //技能检测
         if (isInSkillTargetingMode)
         {
-            HandleSkillTargeting();
             return;
         }
         
@@ -527,7 +522,7 @@ public class PlayerControl : MonoBehaviour
 
     
     [Header("放置方块设置")]
-    public GameObject blockPrefab; // 在Inspector中拖入你的方块预制体
+    public GameObject blockPrefab; 
     public LayerMask groundLayer; // 设置地面层级（用于鼠标射线检测）
     private bool isPlacingMode = false; // 是否处于放置模式
     private Camera mainCamera;
@@ -540,7 +535,7 @@ public class PlayerControl : MonoBehaviour
     }
     private void OnMouseClick(InputAction.CallbackContext context)
     {
-        if (!isPlacingMode || Point-2 < 0) return;
+        if (!isPlacingMode || Point-1 < 0) return;
 
         Vector2 mousePos = inputControl.GamePlay.MousePosition.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(mousePos);
@@ -548,19 +543,19 @@ public class PlayerControl : MonoBehaviour
 
         if (hit.collider != null)
         {
-            // 关键修改：确保坐标对齐到网格中心
+            //确保坐标对齐到网格中心
             Vector2 placePos = new Vector2(
                 Mathf.Floor(hit.point.x / gridSize) * gridSize + gridSize * 0.5f,
                 Mathf.Floor(hit.point.y / gridSize) * gridSize + gridSize * 0.5f
             );
 
-            // 调试显示网格对齐位置（可视化检查）
+            // 调试显示网格对齐位置
             Debug.DrawLine(placePos - Vector2.one * 0.5f, placePos + Vector2.one * 0.5f, Color.green, 2f);
 
             if (!Physics2D.OverlapCircle(placePos, 0.1f, obstacleLayer))
             {
                 Instantiate(blockPrefab, placePos, Quaternion.identity);
-                Point-=2;
+                Point-=1;
             }
         }
 
@@ -603,27 +598,6 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    void HandleSkillTargeting()
-    {
-        // 这里处理技能目标选择的具体逻辑
-        // 例如工程师技能选择障碍类型
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    (currentActiveSkill as EngineerQuickBuildSkill)?.CycleObstacleSelection();
-        //}
-
-        //// 确认技能释放
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    (currentActiveSkill as EngineerQuickBuildSkill)?.ConfirmPlacement();
-        //}
-
-        //// 取消技能
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    (currentActiveSkill as EngineerQuickBuildSkill)?.CancelSkill();
-        //}
-    }
     public void OnRoundStart()
     {
         // 更新所有技能冷却
@@ -634,16 +608,10 @@ public class PlayerControl : MonoBehaviour
         isSkillUsable = (skills.Count > 0) && skills[0].CanUse();
 
         OnSkillChange?.Invoke(this);
-
-        // 更新UI
-        //UIManager.Instance.UpdateActionPoints(currentActionPoints);
-        //UIManager.Instance.UpdateSkillCooldowns();
     }
     public void SpendActionPoints(int amount)
     {
         Point = Mathf.Max(0, Point - amount);
-        // 可以在这里添加UI更新
-
         OnActionPointChange?.Invoke(this);
 
     }
