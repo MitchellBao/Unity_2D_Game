@@ -12,7 +12,7 @@ public class ExplodeSkill : SkillBase
     private Vector2 boxSize;
     private void Start()
     {
-        boxSize = new Vector2(gridSize, gridSize);
+        boxSize = new Vector2(0.9f, 0.9f);
     }
     public void Check5x5Obstacles()
     {
@@ -49,7 +49,7 @@ public class ExplodeSkill : SkillBase
                         enimePlayer.isGetDiamond = false;
                         int nums = 0;
                         Vector2[] possiblePositions = Get3x3Position(player.transform.position, out nums);
-                        Vector2 spawnPos = possiblePositions[Random.Range(0, nums)];
+                        Vector2 spawnPos = possiblePositions[Random.Range(0, nums-1)];
 
                         Instantiate(enimePlayer.GetGemPrefabByKind(enimePlayer.diamondKind),
                             spawnPos, Quaternion.identity);
