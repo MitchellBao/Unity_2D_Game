@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class ExplodeSkill : SkillBase
 {
-    [SerializeField]private LayerMask obstacleLayer;
+    [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask obstacleBackgroundLayer;
     private float gridSize = 1f;
-    private Vector2 boxSize;         
+    private Vector2 boxSize;
     private void Start()
     {
         boxSize = new Vector2(gridSize, gridSize);
@@ -28,7 +29,7 @@ public class ExplodeSkill : SkillBase
                 }
             }
         }
-        
+
     }
 
     public void Check5x5Player()
@@ -43,22 +44,24 @@ public class ExplodeSkill : SkillBase
                 if (player != null)
                 {
                     PlayerControl enimePlayer = player.gameObject.GetComponent<PlayerControl>();
-                    if(enimePlayer.isGetDiamond){
-                        enimePlayer.isGetDiamond = false;  
-                        Vector2[] possiblePositions = Get3x3Position(player.transform.position);
-                        Vector2 spawnPos = possiblePositions[Random.Range(0, possiblePositions.Length)];
-                        
+                    if (enimePlayer.isGetDiamond)
+                    {
+                        enimePlayer.isGetDiamond = false;
+                        int nums = 0;
+                        Vector2[] possiblePositions = Get3x3Position(player.transform.position, out nums);
+                        Vector2 spawnPos = possiblePositions[Random.Range(0, nums)];
+
                         Instantiate(enimePlayer.GetGemPrefabByKind(enimePlayer.diamondKind),
                             spawnPos, Quaternion.identity);
-                        
+
                     }
                 }
             }
         }
 
     }
-    
-    private Vector2[] Get3x3Position(Vector2 center)
+
+    private Vector2[] Get3x3Position(Vector2 center, out int nums)
     {
         Vector2[] result = new Vector2[8];
         int index = 0;
@@ -66,11 +69,15 @@ public class ExplodeSkill : SkillBase
         {
             for (int j = -1; j <= 1; j++)
             {
-                if (i == 0 && j == 0) continue; // Ìø¹ýÖÐÐÄ
+                if (i == 0 && j == 0) continue; //         
+                Vector2 checkPos = center + new Vector2(i * gridSize, j * gridSize);
+                Collider2D player = Physics2D.OverlapBox(checkPos, boxSize, 0, obstacleBackgroundLayer);
+                if (player != null) continue;
                 result[index] = center + new Vector2(i * gridSize, j * gridSize);
                 index++;
             }
         }
+        nums = index;
         return result;
     }
 

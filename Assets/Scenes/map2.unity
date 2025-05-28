@@ -52228,6 +52228,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  obstacleBackgroundLayer:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!4 &2029450200
 Transform:
   m_ObjectHideFlags: 0

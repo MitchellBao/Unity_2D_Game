@@ -45153,6 +45153,10 @@ PrefabInstance:
       propertyPath: actionPointCost
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7805517204804563407, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
+      propertyPath: obstacleBackgroundLayer.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 8225960248275224408, guid: 637109fa171613b4d9a589e006bdf044, type: 3}
       propertyPath: m_Name
       value: player4
