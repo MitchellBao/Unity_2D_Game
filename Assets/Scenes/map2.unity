@@ -410,7 +410,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SKILL : STEAL ( 5 * 5 )\nCD : 3 TURNS\nAP NEEDED : \nUSAGE : PRESS 3"
+  m_text: 'SKILL : STEAL ( 5 * 5 )
+
+    CD : 3 TURNS
+
+    AP NEEDED : 1
+
+    USAGE
+    : PRESS 3'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
   m_sharedMaterial: {fileID: -4167336628293307005, guid: dcd79bf2316d19a49836096bff933e8b, type: 2}
@@ -42694,7 +42701,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   currentPlayerIndex: 1
-  maxRounds: 10
+  maxRounds: 100
   currentRound: 0
   playerLayer:
     serializedVersion: 2
@@ -42975,7 +42982,7 @@ MonoBehaviour:
 
     CD : 3 TURNS
 
-    AP NEEDED : 3
+    AP NEEDED : 4
 
     USAGE
     : PRESS 4'
@@ -49719,7 +49726,7 @@ MonoBehaviour:
 
     CD : 3 TURNS
 
-    AP NEEDED : 2
+    AP NEEDED : 3
 
     USAGE
     : PRESS 2'

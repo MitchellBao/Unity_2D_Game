@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Scenes
+  m_Name: Default Local Group
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_Data:
@@ -19,6 +19,11 @@ MonoBehaviour:
   m_SerializeEntries:
   - m_GUID: 3a2dab237802db44590484dfa06cb435
     m_Address: map2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f22a80ee8c45114ca7f4f4b9f08d1e4
+    m_Address: Assets/Scenes/Persistent.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
